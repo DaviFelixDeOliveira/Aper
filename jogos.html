@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
+    <title>Games Grid</title> <!-- Título da página -->
+    <link rel="stylesheet" href="css/stylejogos.css"> <!-- Link para o arquivo CSS -->
+</head>
+
+<body>
+
+    <div class="submenu"> <!-- Submenu de categorias de jogos -->
+        <a href="#">Popular</a>
+        <a href="#">Dupla</a>
+        <a href="#">Solo</a>
+        <div class="dropdown"> <!-- Dropdown para seleção de gênero -->
+            <a href="javascript:void(0);" onclick="toggleDropdown()">Gênero</a>
+            <div class="menu-dropdown" id="genreDropdown">
+                <a href="#">Terror</a>
+                <a href="#">Tiros</a>
+                <a href="#">Raciocínio</a>
+                <a href="#">Competição</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container"> <!-- Contêiner principal -->
+        <h1>Todos os Jogos</h1>
+        <div class="grid"> <!-- Grid de jogos -->
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://chrispenner.ca/images/tictactoe.png');" onclick="window.location.href='jogoescolhido.html?game=tictactoe'">
+                <img src="https://chrispenner.ca/images/tictactoe.png" alt="Jogo da Velha">
+                <div class="card1-content">
+                    <p class="card1-title">Jogo da Velha</p>
+                    <p class="card1-subtitle">Solo/Multiplayer</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://play-lh.googleusercontent.com/tRpviKT0mUi47iAaBne_yhe_xIuFzpW1mCIqoW457tNsKZddZHwiCUR2ga-rU3VXw04=w240-h480-rw');" onclick="window.location.href='jogoescolhido.html?game=slitherio'">
+                <img src="https://play-lh.googleusercontent.com/tRpviKT0mUi47iAaBne_yhe_xIuFzpW1mCIqoW457tNsKZddZHwiCUR2ga-rU3VXw04=w240-h480-rw" alt="Slither.io">
+                <div class="card1-content">
+                    <p class="card1-title">Slither.io</p>
+                    <p class="card1-subtitle">Multiplayer</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://play-lh.googleusercontent.com/hvvUX1LeHdFv5V8V9jwItvGzsELKHBkUDw8gDjl_n6eBRjTf_Vb7L376jPOBwIRcgbc');" onclick="window.location.href='jogoescolhido.html?game=thiefpuzzle'">
+                <img src="https://play-lh.googleusercontent.com/hvvUX1LeHdFv5V8V9jwItvGzsELKHBkUDw8gDjl_n6eBRjTf_Vb7L376jPOBwIRcgbc" alt="Thief Puzzle">
+                <div class="card1-content">
+                    <p class="card1-title">Thief Puzzle</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUQhWrHvMUNuZO9PjDc1YPoLkRUx5BiKSHP8CnC890Lx3siPzLanY82_qYmlOsrrJn8nc&usqp=CAU');" onclick="window.location.href='jogoescolhido.html?game=deadshot'">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUQhWrHvMUNuZO9PjDc1YPoLkRUx5BiKSHP8CnC890Lx3siPzLanY82_qYmlOsrrJn8nc&usqp=CAU" alt="Dead Shot">
+                <div class="card1-content">
+                    <p class="card1-title">Dead Shot</p>
+                    <p class="card1-subtitle">Multiplayer</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https ://fallguys.onl/upload/imgs/smash-karts.png');" onclick="window.location.href='jogoescolhido.html?game=smashkarts'">
+                <img src="https://fallguys.onl/upload/imgs/smash-karts.png" alt="Smash Karts">
+                <div class="card1-content">
+                    <p class="card1-title">Smash Karts</p>
+                    <p class="card1-subtitle">Multiplayer</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://www.kizgame.com/thumbs/gun-strike-runner_1.webp');" onclick="window.location.href='jogoescolhido.html?game=gunstrikerunner'">
+                <img src="https://www.kizgame.com/thumbs/gun-strike-runner_1.webp" alt="Gun Strike Runner">
+                <div class="card1-content">
+                    <p class="card1-title">Gun Strike Runner</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://play-lh.googleusercontent.com/_BGnWpJXBsQpOQCFuyNqPuqYP293Hx7I7Kwbl4ePMbu_r_hwz-7wOU1mi1O2daj_84PI');" onclick="window.location.href='jogoescolhido.html?game=cuttherope'">
+                <img src="https://play-lh.googleusercontent.com/_BGnWpJXBsQpOQCFuyNqPuqYP293Hx7I7Kwbl4ePMbu_r_hwz-7wOU1mi1O2daj_84PI" alt="Cut the Rope">
+                <div class="card1-content">
+                    <p class="card1-title">Cut the Rope</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi4xWpGESesuIwx-odplPGz19C_Wv70LdzLg&s');" onclick="window.location.href='jogoescolhido.html?game=wordwipe'">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi4xWpGESesuIwx-odplPGz19C_Wv70LdzLg&s" alt="Word Wipe">
+                <div class="card1-content">
+                    <p class="card1-title">Word Wipe</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202401/0816/090d490b92fae83c1a1abf7c50f33177aa03e1bb6ac8bdc2.png');" onclick="window.location.href='jogoescolhido.html?game=helixjump'">
+                <img src="https://image.api.playstation.com/vulcan/ap/rnd/202401/0816/090d490b92fae83c1a1abf7c50f33177aa03e1bb6ac8bdc2.png" alt="Helix Jump">
+                <div class="card1-content">
+                    <p class="card1-title">Helix Jump</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://driftboss2.org//data/image/game/drift-boss-game.png');" onclick="window.location.href='jogoescolhido.html?game=driftboss'">
+                <img src="https://driftboss2.org//data/image/game/drift-boss-game.png" alt="Drift Boss">
+                <div class="card1-content">
+                    <p class="card1-title">Drift Boss</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+            <div class="card1" style="background-repeat: round; background-image: url('https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Flappy_Bird_icon.png/220px-Flappy_Bird_icon.png');" onclick="window.location.href='jogoescolhido.html?game=flappybird'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Flappy_Bird_icon.png/220px-Flappy_Bird_icon.png" alt="Flappy Bird">
+                <div class="card1-content">
+                    <p class="card1-title">Flappy Bird</p>
+                    <p class="card1-subtitle">Solo</p>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="navbar"> <!-- Barra de navegação -->
+            <a href="inicio.html">
+                <div class="nav-item">
+                    <img src="imagens/home.svg" alt="Home" />
+                </div>
+            </a>
+            <a href="pesquisa.html">
+                <div class="nav-item">
+                    <img src="imagens/search.svg" alt="Search">
+                </div>
+            </a>
+            <div class="nav-item" style="margin-top: 0%;">
+                <div class="telaAtual">
+                    <img src="imagens/game.svg" alt="Home" style="margin-left: 12%;margin-bottom: 1%;">
+                    <label style="margin-bottom: -1%;">
+                        Jogos
+                    </label>
+                </div>
+            </div>
+            <a href="perfil.html">
+                <div class="nav-item">
+                    <img src="imagens/profile.svg" alt="Profile">
+                </div>
+            </a>
+        </div>
+        <script>
+            function toggleDropdown() {
+                const dropdown = document.getElementById('genreDropdown');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        </script>
+    </body>
+</html>

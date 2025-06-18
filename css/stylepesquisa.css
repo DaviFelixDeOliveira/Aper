@@ -1,0 +1,179 @@
+    body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+        "Source Han Sans CN", sans-serif;
+}
+
+.divisaoDeBusca {
+    width: 96%;
+    border: 1px solid transparent;
+    margin-left: 2%;
+}
+
+.titulo {
+    width: 99%;
+    margin-bottom: 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Resultado {
+    -webkit-text-stroke: 0.5px white;
+    color: white;
+    font-size: 18px;
+}
+
+.Resultados {
+    overflow-x: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    display: flex;
+    flex-wrap: wrap; /* Permite a quebra para a linha seguinte */
+    row-gap: 65px;
+    column-gap: 20px;
+    justify-content: space-between; /* Garantir que os itens fiquem bem distribuídos */
+}
+
+.MedidasCapaFilme {
+    width: calc(50% - 10px); /* Ajusta a largura para 50% da largura total */
+    height: 250px; /* Aumenta a altura para um formato mais retangular */
+    display: inline-block;
+    background-color: #0a0a0a;
+    text-align: center; /* Alinha o conteúdo no centro */
+    margin-bottom: 20px; /* Distância entre os resultados */
+}
+
+.capaFilme {
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    margin-bottom: 10px;
+}
+
+
+.nmFilme {
+    width: 100%;
+    height: 39px;
+    word-wrap: break-word;
+    overflow: auto;
+    text-overflow: ellipsis;
+    white-space: normal;
+    font-size: 13px;
+    scrollbar-width: none;
+    margin-top: 5px; /* Distância entre imagem e título */
+}
+
+.capaFilme:active {
+    opacity: 0.4;
+}
+
+.navbar {
+    box-sizing: border-box;
+    position: fixed; /* Fixa a barra no rodapé */
+    bottom: 0;
+    width: 95%;
+    height: 80px;
+    background-color: #19191b; /* Cor de fundo da navbar */
+    display: flex;
+    justify-content: space-around; /* Espaçamento uniforme entre os ícones */
+    align-items: center;
+    padding: 10px 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5); /* Sombra no topo da navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: white;
+}
+
+.nav-item img {
+    width: 24px; /* Tamanho do ícone */
+    height: 24px;
+    white-space: nowrap;
+    margin-bottom: 1px; /* Espaçamento entre ícone e texto */
+    filter: invert(100%); /* Faz os ícones ficarem brancos, se forem pretos */
+}
+
+.nav-item p {
+    margin: 0;
+}
+
+.nav-item:active {
+    filter: invert(60%);
+}
+
+.telaAtual {
+    display: inline-block;
+    align-items: center; /* Alinha verticalmente ícone e texto */
+    display: flex; /* Usar flexbox para alinhar os itens */
+    font-size: 14px;
+    gap: 8px;
+    -webkit-text-stroke: 0.1px rgb(255, 255, 255);
+    background-color: red;
+    width: 125px;
+    border-radius: 50px;
+    height: 43px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.group {
+    display: flex;
+    line-height: 28px;
+    align-items: center;
+    position: relative;
+    width: 86%;
+    margin-top: 7%;
+}
+
+.input {
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    height: 40px;
+    padding-left: 2.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #1b1b1d;
+    outline: none;
+    color: #4c4c4e;
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    cursor: text;
+    border: 1px solid #1b1b1d;
+    z-index: 0;
+}
+
+.input::placeholder {
+    color: #4c4c4e;
+    -webkit-text-stroke: 0.7px #4c4c4e;
+}
+
+.input:focus {
+    box-shadow: 0 0 0 2.5px #3d3d3d;
+    box-shadow: 0 0 0 2.5px #757575, 0px 0px 25px -15px #000;
+    color: white;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    fill: #4c4c4e;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    z-index: 1;
+}

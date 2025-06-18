@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filme</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    />
+    <link rel="stylesheet" href="css/styleverConteudo.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div id="carregamento">
+      /* From Uiverse.io by VashonG */
+      <div aria-live="assertive" role="alert" class="loader"></div>
+    </div>
+    <button
+      class="voltar"
+      id="voltar"
+      onclick="window.location.href='inicio.html'"
+    >
+      <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <!-- Imagem de capa -->
+    <div class="imgCapa" id="imgCapa"></div>
+
+    <!-- 4K, HDR e Votação -->
+    <div class="tipoConteudo">
+      <div class="caracteristicas">
+        <div class="fundoCaracteristicas">
+          <span class="labelCaracteristicas">4K</span>
+        </div>
+        <div class="fundoCaracteristicas">
+          <span class="labelCaracteristicas">HDR</span>
+        </div>
+        <div class="fundoCaracteristicas">
+          <span class="labelCaracteristicas" id="avaliacao">0.0</span>
+        </div>
+      </div>
+      <span class="anogenerotamanho" id="genero">Indefinido</span>
+    </div>
+
+    <!-- Título -->
+    <div class="titulo" id="titulo">
+      <span style="font-size: 20px">Indefinido</span>
+    </div>
+
+    <!-- Informação do filme -->
+    <span class="anogenerotamanho" id="genero"></span>
+
+    <!-- Botão de assistir (agora também serve como o dropdown) -->
+    <div class="dropdown">
+      <button class="botaoAssistir" id="assistirBtn">
+        <span class="textoassistir">Assistir</span>
+        <i class="fa fa-chevron-down" id="setaIcone"></i>
+        <!-- Ícone da seta -->
+      </button>
+
+      <ul class="dropdown-menu" id="dropdownMenu">
+        <li class="dropdown-item" id="servidor1">Servidor 1</li>
+        <li class="dropdown-item" id="servidor2">Servidor 2</li>
+        <li class="dropdown-item" id="servidor3">Servidor 3</li>
+      </ul>
+    </div>
+
+    <!-- Descrição -->
+    <div class="descricao" id="descricao"></div>
+    <button class="btn-ler-mais" id="btn-ler-mais">Ler mais</button>
+
+    <!-- Interações -->
+    <div class="interacoes">
+      <div class="botaosalvar" onclick="toggleSalvar()">
+        <div class="salvar">
+          <i class="fas fa-bookmark"></i>
+          <!-- Ícone de salvar -->
+        </div>
+        <span class="txtinteracoes">Salvar</span>
+      </div>
+
+      <div class="botaocurtir" onclick="toggleCurtida()">
+        <div class="curtir">
+          <i class="fas fa-heart"></i>
+          <!-- Ícone de coração -->
+        </div>
+        <span class="txtinteracoes">Curtir</span>
+      </div>
+
+      <div class="botaocompartilhar" onclick="toggleCompartilhar()">
+        <div class="compartilhar">
+          <i class="fas fa-share-alt"></i>
+          <!-- Ícone de compartilhar -->
+        </div>
+        <span class="txtinteracoes">Compartilhar</span>
+      </div>
+    </div>
+
+    <!-- Divisor -->
+    <hr class="divisor" />
+
+    <!-- Player do vídeo -->
+    <iframe
+      class="player"
+      id="player"
+      src=""
+      width="100%"
+      height="500"
+      allowfullscreen="true"
+      scrolling="no"
+      sandbox="allow-scripts allow-same-origin"
+      frameborder="0"
+    ></iframe>
+
+    <script>
+      const apiKey = "e293e84786f06c94bf36414cc9240da4";
+      const apiUrlMovie = "https://api.themoviedb.org/3/movie/";
+      const apiUrlTV = "https://api.themoviedb.org/3/tv/";
+      let imdbIdGlobal = "";
+
+      // Captura o IMDb ID da URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const imdbId = urlParams.get("imdbId");
+      imdbIdGlobal = imdbId; // Armazena o IMDb ID globalmente
+
+      // Se não houver IMDb ID na URL, mostra um alerta
+      if (!imdbIdGlobal) {
+        alert("IMDb ID não encontrado na URL!");
+      }
+
+      async function buscarFilmeOuSerie() {
+        try {
+          // Captura os parâmetros da URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const imdbId = urlParams.get("imdbId");
+          let tipo = urlParams.get("tipo"); // 'filme' ou 'serie'
+
+          if (!imdbId) {
+            alert("IMDb ID não encontrado na URL!");
+            return;
+          }
+
+          imdbIdGlobal = imdbId; // Armazena o IMDb ID globalmente
+
+          // Se não houver tipo, assume-se que seja filme
+          if (!tipo) {
+            tipo = "filme";
+          }
+
+          if (tipo === "filme") {
+            // Buscar filme
+            const responseMovie = await fetch(
+              `${apiUrlMovie}${imdbIdGlobal}?api_key=${apiKey}&language=pt-BR`
+            );
+
+            // Verificando se a resposta do filme é bem-sucedida
+            if (responseMovie.ok) {
+              const dataMovie = await responseMovie.json();
+              if (dataMovie) {
+                // Atualiza os detalhes do filme
+                atualizarDetalhes(dataMovie, "movie");
+                return; // Filme encontrado, então não precisa continuar para a série
+              }
+            } else {
+              alert("Filme não encontrado.");
+            }
+          } else if (tipo === "serie") {
+            // Buscar série
+            const urlTV = `${apiUrlTV}${imdbIdGlobal}?api_key=${apiKey}&language=pt-BR`;
+            console.log("Tentando buscar série com o link:", urlTV); // Log do link para a série
+            const responseTV = await fetch(urlTV);
+
+            // Verifica se a resposta da série é bem-sucedida
+            if (!responseTV.ok) {
+              throw new Error(
+                "Erro ao buscar série, status " + responseTV.status
+              );
+            }
+
+            const dataTV = await responseTV.json();
+
+            if (dataTV) {
+              // Atualiza os detalhes da série
+              atualizarDetalhes(dataTV, "tv");
+            } else {
+              alert("Série não encontrada.");
+            }
+          } else {
+            alert("Tipo inválido. Use 'filme' ou 'serie'.");
+          }
+        } catch (error) {
+          console.error("Erro ao buscar filme ou série:", error);
+          alert("Ocorreu um erro ao buscar o filme ou a série.");
+        } finally {
+          liberarTela();
+        }
+      }
+
+      async function liberarTela() {
+        const carregamento = document.getElementById("carregamento");
+        if (carregamento) {
+          // Usando transição para suavizar a mudança
+          carregamento.style.transition = "opacity 0.5s ease-out";
+          carregamento.style.opacity = "0";
+          setTimeout(() => {
+            carregamento.style.display = "none"; // Após o fade, esconder completamente
+          }, 1500); // Tempo igual à transição 1500
+        }
+      }
+
+      function atualizarDetalhes(data, tipo) {
+        if (tipo === "movie") {
+          // Atualiza o filme
+          document.getElementById(
+            "imgCapa"
+          ).style.background = `linear-gradient(rgba(10, 10, 10, 0) 53%, rgba(10, 10, 10, 0.9) 99%) 0% 0% / cover, url(https://image.tmdb.org/t/p/w500${data.backdrop_path}) no-repeat center`;
+          document.getElementById(
+            "titulo"
+          ).innerHTML = `<span style="font-size: 20px">${data.title}</span>`;
+          document.getElementById("avaliacao").innerText =
+            data.vote_average.toFixed(1);
+          document.getElementById("genero").innerText = `${
+            data.release_date.split("-")[0]
+          } · ${data.genres
+            .slice(0, 1)
+            .map((genre) => genre.name)
+            .join(" / ")}`;
+          document.getElementById("descricao").innerText = data.overview;
+
+          // Ajusta os links de iframe para filmes
+          setIframeSrc(imdbIdGlobal, "movie");
+
+          // Ajusta o player de vídeo se houver trailer
+          fetchTrailer(data.id, "movie");
+        } else if (tipo === "tv") {
+          // Atualiza a série
+          document.getElementById(
+            "imgCapa"
+          ).style.background = `linear-gradient(rgba(10, 10, 10, 0) 53%, rgba(10, 10, 10, 0.9) 99%) 0% 0% / cover, url(https://image.tmdb.org/t/p/w500${data.backdrop_path}) no-repeat center`;
+          document.getElementById(
+            "titulo"
+          ).innerHTML = `<span style="font-size: 20px">${data.name}</span>`;
+          document.getElementById("avaliacao").innerText =
+            data.vote_average.toFixed(1);
+          document.getElementById("genero").innerText = `${
+            data.first_air_date.split("-")[0]
+          } · ${data.genres
+            .slice(0, 1)
+            .map((genre) => genre.name)
+            .join(" / ")}`;
+          document.getElementById("descricao").innerText = data.overview;
+
+          // Ajusta os links de iframe para séries
+          setIframeSrc(imdbIdGlobal, "tv");
+
+          // Ajusta o player de vídeo se houver trailer
+          fetchTrailer(data.id, "tv");
+        }
+      }
+
+      async function fetchTrailer(id, tipo) {
+        try {
+          const videoResponse = await fetch(
+            `${
+              tipo === "movie" ? apiUrlMovie : apiUrlTV
+            }${id}/videos?api_key=${apiKey}`
+          );
+          const videoData = await videoResponse.json();
+          const video = videoData.results.find((v) => v.type === "Trailer");
+          if (video) {
+            document.getElementById(
+              "player"
+            ).src = `https://www.youtube.com/embed/${video.key}`;
+          } else {
+            alert("Trailer não encontrado.");
+          }
+        } catch (error) {
+          console.error("Erro ao buscar trailer:", error);
+          alert("Erro ao buscar trailer.");
+        }
+      }
+
+      function setIframeSrc(id, tipo) {
+        // Ajusta o src do iframe com base no tipo (movie ou tv)
+        const player = document.getElementById("player");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const assistirBtn = document.getElementById("assistirBtn");
+
+        if (tipo === "movie") {
+          document
+            .getElementById("servidor1")
+            .addEventListener("click", function () {
+              player.src = `https://embed.warezcdn.link/filme/${id}`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+          document
+            .getElementById("servidor2")
+            .addEventListener("click", function () {
+              player.src = `https://superflixapi.dev/filme/${id}`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+          document
+            .getElementById("servidor3")
+            .addEventListener("click", function () {
+              player.src = `https://embed.embedplayer.site/${id}/`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+        } else if (tipo === "tv") {
+          document
+            .getElementById("servidor1")
+            .addEventListener("click", function () {
+              player.src = `https://embed.warezcdn.link/serie/${id}`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+          document
+            .getElementById("servidor2")
+            .addEventListener("click", function () {
+              player.src = `https://superflixapi.dev/serie/${id}`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+          document
+            .getElementById("servidor3")
+            .addEventListener("click", function () {
+              player.src = `https://embed.embedplayer.site/serie/${id}/`;
+              assistirBtn.classList.remove("dropdown-active");
+              dropdownMenu.classList.toggle("active");
+            });
+        }
+      }
+
+      // Carrega as informações automaticamente quando a página é carregada
+      window.onload = buscarFilmeOuSerie;
+
+      // Função de "ler mais"
+      document
+        .getElementById("btn-ler-mais")
+        .addEventListener("click", function () {
+          const descricao = document.getElementById("descricao");
+          const btn = this;
+
+          if (descricao.classList.contains("expandido")) {
+            descricao.classList.remove("expandido");
+            btn.innerText = "Ler mais";
+          } else {
+            descricao.classList.add("expandido");
+            btn.innerText = "Ler menos";
+          }
+        });
+
+      function toggleCurtida() {
+        const curtirIcon = document.querySelector(".curtir");
+        curtirIcon.classList.toggle("ativo"); // Alterna a classe ativo
+      }
+
+      function toggleSalvar() {
+        const salvarIcon = document.querySelector(".salvar");
+        salvarIcon.classList.toggle("ativo"); // Alterna a classe ativo
+      }
+
+      function toggleCompartilhar() {
+        const compartilharIcon = document.querySelector(".compartilhar");
+        compartilharIcon.classList.toggle("ativo"); // Alterna a classe ativo
+      }
+
+      const assistirBtn = document.getElementById("assistirBtn");
+      const dropdownMenu = document.getElementById("dropdownMenu");
+
+      assistirBtn.addEventListener("click", function () {
+        dropdownMenu.classList.toggle("active");
+
+        if (dropdownMenu.classList.contains("active")) {
+          assistirBtn.classList.add("dropdown-active");
+        } else {
+          assistirBtn.classList.remove("dropdown-active");
+        }
+      });
+    </script>
+  </body>
+</html>

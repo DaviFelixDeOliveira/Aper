@@ -1,0 +1,301 @@
+
+body {
+  background-color: #0a0a0a;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+    "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft Yahei UI", "Microsoft Yahei", "Source Han Sans CN", sans-serif;
+}
+
+.slider_container {
+    position: absolute;
+    width: 100%;
+    height: 29%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+    left: 0;
+    top: 0;
+}
+.slider {
+  position: relative;
+  width: 380%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  animation: 30s cubic-bezier(1, 0.95, 0.565, 1) sliding infinite;
+}
+.slide {
+  position: relative;
+  min-width: 100%;
+  height: 100%;
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+}
+
+.slide.one {
+    background-image: url(https://cdn.ome.lt/rnDDX1jRmHx3KKhHuM2fJvDHq_M=/970x360/smart/uploads/conteudo/fotos/venom3_HzWOMBv.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.slide.two {
+    background-image: url(https://rollingstone.com.br/media/uploads/2024/07/divertida-mente-2-se-torna-a-maior-animacao-da-historia-do-cinema.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.slide.three {
+    background-image: url(https://ingresso-a.akamaihd.net/b2b/production/uploads/article/image/2708/38956089d4ae41385e15bdd91d2facff.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.slide.four {
+    background-image: url(https://tm.ibxk.com.br/2024/10/18/18102731424066.jpg?ims=750x);
+    background-size: cover;
+    background-position: center;
+}
+.slide.five {
+    background-image: url(https://static.poder360.com.br/2024/11/ainda-estou-aqui-1-848x477.png);
+    background-size: cover;
+    background-position: center;
+}
+@keyframes sliding {
+  0% {
+    transform: translateX(0%);
+  }
+  20% {
+    transform: translateX(0%);
+  }
+  25% {
+    transform: translateX(-100%);
+  }
+  45% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(-200%);
+  }
+  70% {
+    transform: translateX(-200%);
+  }
+  75% {
+    transform: translateX(-300%);
+  }
+  95% {
+    transform: translateX(-300%);
+  }
+  100% {
+    transform: translateX(-400%);
+  }
+}
+
+.bordas {
+  width: 91%;
+  border: 1px solid transparent;
+  margin-left: 5%;
+}
+
+.tamanhoFilmeCatalogo{
+    margin: -8px;
+    background-size: contain;
+    margin-top: -17px;
+}
+
+#sombra{
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(10, 10, 10, 1) 104%) 0% / cover, url(../imagens/nada.png) center center no-repeat;
+    width: 412px;
+    height: 257px;
+    background-size: cover;
+    z-index: 99;
+    position: relative;
+    pointer-events: none;  
+}
+
+.generos {
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-top: 6%;
+  margin-left: 3%;
+  scrollbar-width: none;
+}
+.generos-scroll .item {
+  display: inline-block;
+  color: #616161;
+  -webkit-text-stroke: 0.7px #616161;
+  margin: 0 3%;
+  font-size: 17px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: color 0.3s, opacity 0.3s;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+a:focus,
+a:active {
+  background: none;
+  outline: none;
+}
+.item:active {
+  background-color: transparent;
+  font-weight: bold;
+  color: white;
+}
+.titulo {
+  width: 99%;
+  margin-top: 2%;
+  margin-bottom: 3%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nmTitulo {
+  -webkit-text-stroke: 0.5px white;
+  color: white;
+  font-size: 18px;
+}
+.seeAll {
+  margin-top: 1%;
+  color: red;
+  -webkit-text-stroke: 0.7px red;
+  font-size: 14px;
+  margin-left: -2%;
+}
+.seeAll:active {
+  color: rgb(71, 0, 0);
+  -webkit-text-stroke: 0.7px rgb(71, 0, 0);
+}
+.Playlist {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.MedidasCapaFilme {
+  position: relative;
+  width: 120px;
+  height: 177px;
+  margin-top: 2%;
+  margin-right: 4%;
+  justify-content: center;
+  display: inline-block;
+  background-color: #0a0a0a; /* Cor padrão */
+  border-radius: 7px;
+}
+.capaFilme {
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  margin-bottom: -5%;
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 0.3s ease; /* Animação suave do box-shadow */
+}
+.capaFilme:active {
+  opacity: 0.4;
+}
+.nmFilme {
+  width: 120px;
+  height: 42px;
+  word-wrap: break-word;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: normal;
+  scrollbar-width: none;
+  font-size: 12px;
+  font-weight: bold;
+}
+.navbar {
+  box-sizing: border-box;
+  position: fixed; /* Fixa a barra no rodapé */
+  bottom: 0;
+  width: 95%;
+  height: 80px;
+  background-color: #19191b; /* Cor de fundo da navbar */
+  display: flex;
+  justify-content: space-around; /* Espaçamento uniforme entre os ícones */
+  align-items: center;
+  padding: 10px 0;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5); /* Sombra no topo da navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: white;
+}
+.nav-item img {
+  width: 24px; /* Tamanho do ícone */
+  height: 24px;
+  white-space: nowrap;
+  margin-bottom: 1px; /* Espaçamento entre ícone e texto */
+  filter: invert(100%); /* Faz os ícones ficarem brancos, se forem pretos */
+}
+.nav-item p {
+  margin: 0;
+}
+.nav-item:active {
+  filter: invert(60%);
+}
+.telaAtual {
+  display: inline-block;
+  align-items: center; /* Alinha verticalmente ícone e texto */
+  display: flex; /* Usar flexbox para alinhar os itens */
+  font-size: 14px;
+  gap: 8px;
+  -webkit-text-stroke: 0.1px rgb(255, 255, 255);
+  background-color: red;
+  width: 97px;
+  border-radius: 50px;
+  height: 43px;
+}
+/* Animação do Pull-to-Refresh */
+#refresh {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    z-index: 4;
+}
+
+#refresh.show {
+    transform: translateY(0);
+}
+.fade-screen {
+  position: fixed; /* Fixa a camada sobre toda a tela */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0a0a0a;
+  opacity: 0; /* Inicialmente invisível */
+  pointer-events: none; /* Não bloqueia interações */
+  z-index: 9999; /* Fica sobre todo o conteúdo */
+  transition: opacity 0.5s ease-in-out; /* Animação de fade-in */
+}
+
+/* Quando a tela preta deve aparecer */
+.fade-screen.active {
+  opacity: 1; /* Torna a tela preta visível */
+}

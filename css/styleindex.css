@@ -1,0 +1,179 @@
+   
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+        
+        body {
+        background-color: #0a0a0a;
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+        "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB",
+        "Microsoft Yahei UI", "Microsoft Yahei", "Source Han Sans CN", sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        position: relative;
+        }
+
+      /* Estilo do título FREEFLIX */
+      .header {
+        position: absolute;
+        top: 20px; /* Título na parte superior da tela */
+        text-align: center;
+        font-size: 1.5rem; /* Aumentando o tamanho da fonte */
+        font-weight: bold;
+        color: white;
+        width: 100%;
+      }
+
+      /* Deixa a palavra Free em vermelho */
+      .header span {
+        color: red;
+      }
+
+      /* Caixa flutuante */
+      .floating-box {
+        width: calc(100% - 18px);
+        max-width: 400px;
+        height: 335px;
+        background: #181818;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.7),
+          0px -7px 25px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 10px;
+      }
+
+      /* Título dentro da caixa flutuante */
+      .floating-box h1 {
+        font-size: 1.7rem; /* Tamanho maior para o título */
+        font-weight: bold;
+        opacity: 0; /* Começa invisível para a animação */
+        transition: opacity 1s ease-in-out; /* Transição suave de visibilidade */
+      }
+
+      /* Parágrafo dentro da caixa flutuante */
+      .floating-box p {
+        font-size: 20px; /* Tamanho do texto */
+        font-weight: 300;
+        color: #ddd;
+        margin-bottom: 40px; /* Espaço abaixo do texto */
+        opacity: 0; /* Começa invisível para a animação */
+        transition: opacity 1s ease-in-out; /* Transição de visibilidade */
+      }
+
+      /* Estilo do botão na caixa flutuante */
+      .floating-box button {
+        width: 100%;
+        background: red;
+        color: white;
+        font-size: 1.1rem; /* Tamanho do texto do botão */
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 18px 0;
+        cursor: pointer; /* Aponta o cursor para mostrar que é clicável */
+        transition: background 0.3s ease; /* Transição de cor quando o botão é pressionado */
+      }
+
+      .floating-box button:hover {
+        background: darkred; /* Cor escura de fundo */
+      }
+
+      /* Texto vermelho dentro de algum conteúdo */
+      .red-text {
+        color: red;
+      }
+
+      /* Bolinhas */
+      .dots {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 110px;
+      }
+
+      /* Estilo das bolinhas */
+      .dots span {
+        width: 10px; /* Tamanho das bolinhas */
+        height: 10px;
+        background: #666; /* Cor inicial das bolinhas */
+        border-radius: 50%; /* Torna as bolinhas redondas */
+        transition: background 0.4s ease; /* Transição para mudar a cor OBS: tem que estar em sincronia com os slides exemplo 3s = 3000 */
+      }
+
+      /* Quando a bolinha estiver ativa */
+      .dots span.active {
+        background: white; /* Cor das bolinhas ativas */
+      }
+
+      /* Animação para o conteúdo (fica deslizando entre os textos) */
+      @keyframes carousel {
+        0% {
+          transform: translateX(0);
+        }
+        33% {
+          transform: translateX(-20px);
+        }
+        66% {
+          transform: translateX(-40px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .rolodefilme {
+        position: absolute;
+            width: 67%;
+        top: 19%;
+      }
+
+      .personalizar {
+        position: absolute;
+        width: 65%;
+        top: 23%;
+      }
+      .compartilhar {
+        border-radius: 75px;
+        position: absolute;
+width: 90%;
+    top: 15%;
+      }
+
+/* Classe base para todas as imagens */
+img {
+  opacity: 0; /* Começa invisível */
+  visibility: hidden; /* Não é visível */
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out; /* Transição suave de opacidade e visibilidade */
+  position: absolute; /* Para posicionar corretamente */
+  z-index: 0; /* Camada inferior */
+}
+
+/* Quando a imagem deve aparecer */
+img.show {
+  opacity: 1; /* Torna visível */
+  visibility: visible; /* Visível */
+  z-index: 1; /* Camada superior */
+}
+
+/* Classe para desaparecer gradualmente */
+img.fade-out {
+  opacity: 0; /* Gradualmente invisível */
+  visibility: hidden; /* Oculta após a transição */
+  z-index: 0; /* Manda para o fundo */
+}
+
+
+        

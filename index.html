@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
+    <title>Freeflix</title> <!-- Título da página -->
+    <link rel="stylesheet" href="css/styleindex.css" /> <!-- Link para o arquivo CSS -->
+</head>
+<body>
+    <!-- Imagens de fundo e ícones -->
+    <img src="imagens/rolo-de-filme.png" class="rolodefilme">
+    <img src="imagens/personalizar.png" class="personalizar">
+    <img src="imagens/compartilhar.png" class="compartilhar">
+
+    <!-- Cabeçalho do site -->
+    <div class="header">
+        Aper
+    </div>
+
+    <!-- Caixa flutuante (não pode ser removida) -->
+    <div class="floating-box">
+        <h1 class="text-slide">########### <span>Free</span></h1>
+        <p class="text-slide">############,<br />############</p>
+
+        <div class="dots">
+            <span class="active"></span> <!-- Indicador do slide ativo -->
+            <span></span>
+            <span></span>
+        </div>
+        <button onclick="window.location.href='login.html'">Iniciar</button> <!-- Botão para iniciar -->
+    </div>
+
+    <script>
+        // Selecionando as bolinhas que indicam o slide atual
+        const dots = document.querySelectorAll(".dots span");
+
+        // Texto para cada slide
+        const texts = [
+            {
+                title: "Personalize sua <span class='red-text'>Experiência</span>",
+                text: "Escolha seus gêneros favoritos e receba recomendações que combinam com o seu estilo.",
+                imageClass: "personalizar", // Classe da imagem para este slide
+            },
+            {
+                title: "<span class='red-text'>Acompanhe</span> e <span class='red-text'>Compartilhe</span>",
+                text: "Salve seus favoritos, curta os melhores filmes e compartilhe com seus amigos.",
+                imageClass: "compartilhar", // Classe da imagem para este slide
+            },
+            {
+                title: "Descubra o Mundo do <span class='red-text'>Entretenimento</span>",
+                text: "Explore uma seleção incrível de filmes e séries especialmente escolhidos para você.",
+                imageClass: "rolodefilme", // Classe da imagem para este slide
+            },
+        ];
+
+        let currentIndex = 0; // Índice do texto atual
+
+        // Atualiza o conteúdo da caixa flutuante
+        function updateContent() {
+            const currentText = texts[currentIndex]; // Texto atual
+            const titleElement = document.querySelector(".floating-box h1"); // Título da caixa
+            const textElement = document.querySelector(".floating-box p"); // Texto da caixa
+
+            // Seleciona a imagem atual (ativa) para aplicar fade-out
+            const currentImage = document.querySelector("img.show");
+
+            // Fade out: Faz o texto e a imagem desaparecerem suavemente
+            titleElement.style.opacity = 0;
+            textElement.style.opacity = 0;
+
+            if (currentImage) {
+                currentImage.classList.remove("show");
+                currentImage.classList.add("fade-out");
+            }
+
+            // Espera o tempo da transição de fade-out (1 segundo)
+            setTimeout(() => {
+                // Atualiza o conteúdo
+                titleElement.innerHTML = currentText.title;
+                textElement.innerHTML = currentText.text;
+
+                // Atualiza a próxima imagem
+                const nextImage = document.querySelector(`.${currentText.imageClass}`);
+                if (nextImage) {
+                    nextImage.classList.remove("fade-out");
+                    nextImage.classList.add("show");
+                }
+
+                // Fade in: Faz o texto aparecer
+                titleElement.style.opacity = 1;
+                textElement.style.opacity = 1;
+
+                // Atualiza a bolinha ativa
+                dots.forEach((dot) => dot.classList.remove("active")); // Remove a classe "active" de todas as bolinhas
+                dots[currentIndex].classList.add("active"); // Adiciona a classe "active" na bolinha atual
+            }, 1000); // Tempo de espera para sincronizar com a transição de fade-out
+
+            // Atualiza para o próximo texto
+            currentIndex = (currentIndex + 1) % texts.length; // Avança para o próximo índice
+        }
+
+        // Inicializa o conteúdo ao carregar a página
+        updateContent();
+
+        // Atualiza o conteúdo a cada 5 segundos
+        setInterval (updateContent, 5000); // Chama a função de atualização a cada 5 segundos
+    </script>
+</body>
+</html>

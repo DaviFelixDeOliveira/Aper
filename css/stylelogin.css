@@ -1,0 +1,209 @@
+   body {
+    background-image: url(../imagens/fundo.jpg);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100vh;
+    background-size: 740px;
+    backdrop-filter: blur(3px);
+    }
+ 
+    .container {
+      width: 100%;
+      padding: 0;
+      position: relative;
+    }
+ 
+    .form-container {
+      background-color: #121212;
+      border-radius: 90px 90px 0 0;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 600px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-right: 10px;
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.7);
+    }
+ 
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+ 
+    .back-arrow img {
+      width: 20px;
+      height: 20px;
+    }
+ 
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #fff;
+      text-align: center;
+    }
+ 
+    p {
+      font-size: 14px;
+      color: #bbb;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+ textarea:focus, input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+} 
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+ 
+    .input-group label {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+ 
+    .input-group input {
+      padding: 12px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 14px;
+      padding-left: 40px;
+      margin-bottom: 5px;
+      position: relative;
+    }
+ 
+    /* Imagem de fundo dentro das caixas de input */
+  #email{
+    background-image: url(../imagens/icoemail.png);
+    margin-right: 10px;
+    margin-left: 5px;
+    background-size: 24px;
+    background-position: 12px center;
+    background-repeat: no-repeat;
+    width: 83%;
+    }
+
+        #password{
+    background-image: url(../imagens/icopass.png);
+    margin-right: 10px;
+    margin-left: 5px;
+    background-size: 24px;
+    background-position: 12px center;
+    background-repeat: no-repeat;
+    width: 83%;
+    }
+ 
+    .input-group small {
+      color: #666;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+ 
+    .login-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      padding: 12px;
+      background-color: #e50914;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin: 20px auto 0;
+    }
+ 
+    .login-btn:hover {
+      background-color: #b40811;
+    }
+ 
+    .terms {
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 20px;
+      text-align: center;
+    }
+ 
+    .terms a {
+      color: #e50914;
+      text-decoration: none;
+    }
+ 
+    .social-login {
+      margin-top: 20px;
+    }
+ 
+    .social-login span {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+ 
+    .icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+ 
+    .icons img {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+ 
+    .already-account {
+      font-size: 14px;
+      margin-top: 20px;
+      text-align: center;
+    }
+ 
+    .already-account a {
+      color: #e50914;
+      text-decoration: none;
+    }
+ 
+    .metflix-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: #fff;
+      margin-top: 20px;
+    }
+ 
+    .metflix-title {
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 0;
+      width: 100%;
+      z-index: 10;
+    }
+ 
+    .met {
+      color: #fff; /* Cor branca para 'Met' */
+    }
+ 
+    .flix {
+      color: #e50914; /* Cor vermelha para 'flix' */
+    }

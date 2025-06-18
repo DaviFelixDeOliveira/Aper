@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
+    <title>Cadastro</title> <!-- Título da página -->
+    <link rel="stylesheet" href="css/stylecadastro.css"> <!-- Link para o arquivo CSS -->
+</head>
+<body>
+    <div class="container">
+        <!-- Título do site -->
+        <div class="metflix-title">
+            <span class="aper">Aper</span>
+            
+        </div>
+
+        <!-- Container do formulário de cadastro -->
+        <div class="form-container">
+            <h1>Cadastro</h1>
+            <p>Insira suas informações abaixo ou continue com uma conta social</p>
+            <form>
+                <div class="input-group">
+                    <label for="display-name">Nome de Exibição</label>
+                    <input type="text" id="display-name" placeholder="Digite seu nome"> <!-- Campo de entrada para nome de exibição -->
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Digite seu email"> <!-- Campo de entrada para email -->
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha"> <!-- Campo de entrada para senha -->
+                </div>
+                <button class="signup-btn" type="button">Cadastrar</button> <!-- Botão de cadastro -->
+            </form>
+
+            <div class="terms">
+                Ao se cadastrar, você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>. <!-- Termos de uso e política de privacidade -->
+            </div>
+
+            <div class="social-login">
+                <span>Ou entre com</span>
+                <div class="icons">
+                    <img src="imagens/google.png" alt="Google"> <!-- Ícone do Google -->
+                    <img src="imagens/facebook.png" alt="Facebook"> <!-- Ícone do Facebook -->
+                    <img src="imagens/twitter.png" alt="Apple"> <!-- Ícone do Twitter -->
+                </div>
+            </div>
+
+            <div class="already-account">
+                <p>Já tem uma conta? <a href="index.html">Faça login</a></p> <!-- Link para a página de login -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se o usuário já está cadastrado no localStorage
+        window.onload = function() {
+            const usuario = localStorage.getItem('usuario'); // Obtém o usuário do localStorage
+            
+            if (usuario) {
+                // Se o usuário já tiver uma conta, redireciona para a página principal
+                window.location.href = "inicio.html"; // Altere para a sua página principal
+            }
+        };
+
+        // Função de cadastro
+        document.querySelector('.signup-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // Previne o envio do formulário
+
+            const nome = document.getElementById('display-name').value; // Obtém o valor do campo de nome
+            const email = document.getElementById('email').value; // Obtém o valor do campo de email
+            const senha = document.getElementById('password').value; // Obtém o valor do campo de senha
+
+            if (nome && email && senha) {
+                // Salva os dados no localStorage
+                localStorage.setItem('usuario', JSON.stringify({ nome, email, senha }));
+
+                // Redireciona para a página principal
+                window.location.href = "inicio.html"; // Altere para a sua página principal
+            } else {
+                alert("Preencha todos os campos."); // Alerta se algum campo estiver vazio
+            }
+        });
+    </script>
+</body>
+</html>

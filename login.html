@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" /> <!-- Define a codificação de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsividade -->
+    <title>Login</title> <!-- Título da página -->
+    <link rel="stylesheet" href="css/stylelogin.css" /> <!-- Link para o arquivo CSS -->
+</head>
+<body>
+    <div class="container">
+        <!-- Título do site -->
+        <div class="metflix-title">
+            <span class="met">Met</span><span class="flix">flix</span>
+        </div>
+
+        <!-- Container do formulário de login -->
+        <div class="form-container">
+            <h1>Login</h1>
+            <p>Insira suas informações abaixo ou continue com uma conta social</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Digite seu email" /> <!-- Campo de entrada para email -->
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" /> <!-- Campo de entrada para senha -->
+                </div>
+                <button class="login-btn" type="submit">Login</button> <!-- Botão de login -->
+            </form>
+
+            <div class="already-account">
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p> <!-- Link para cadastro -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se o usuário já está cadastrado no localStorage
+        window.onload = function () {
+            const usuario = localStorage.getItem("usuario"); // Obtém o usuário do localStorage
+
+            if (usuario) {
+                // Se o usuário já tiver uma conta, redireciona para a página principal
+                window.location.href = "inicio.html"; // Altere para a sua página principal
+            }
+        };
+
+        // Função de login
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Impede o envio do formulário padrão
+
+            const emailInput = document.getElementById("email").value; // Obtém o valor do campo de email
+            const passwordInput = document.getElementById("password").value; // Obtém o valor do campo de senha
+
+            const usuario = JSON.parse(localStorage.getItem("usuario")); // Pega os dados do usuário armazenado no localStorage
+
+            if (usuario) {
+                // Verifica se o email e a senha coincidem com os dados armazenados
+                if (usuario.email === emailInput && usuario.senha === passwordInput) {
+                    // Redireciona para a página principal se as credenciais estiverem corretas
+                    window.location.href = "inicio.html"; // Altere para a sua página principal
+                } else {
+                    // Caso as credenciais estejam incorretas
+                    alert("Informações incorretas. Por favor, verifique seu email e senha.");
+                }
+            } else {
+                // Caso não haja nenhum usuário armazenado no localStorage
+                alert("Nenhuma conta encontrada. Por favor, cadastre-se primeiro.");
+            }
+        });
+    </script>
+</body>
+</html>

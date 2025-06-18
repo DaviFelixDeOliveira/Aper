@@ -1,0 +1,343 @@
+ * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+        "Source Han Sans CN", sans-serif;
+}
+      body {
+        background-color: #0a0a0a;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .profile-container {
+        width: 90%;
+        max-width: 400px;
+      }
+
+      .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-picture {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        border: 2px solid #fff;
+      }
+
+      .profile-picture img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .profile-name {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .profile-role {
+        font-size: 0.9em;
+        color: #bbb;
+      }
+
+      .storage-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+      }
+
+      .storage-info .circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: conic-gradient(rgba(208, 8, 8, 1) 48%, #333 48%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      .storage-info .details {
+        text-align: left;
+        flex-grow: 1;
+        margin-left: 10px;
+      }
+
+      .storage-info .details h4 {
+        font-size: 1em;
+        margin-bottom: 5px;
+        color: #fff;
+      }
+
+      .storage-info .details p {
+        font-size: 0.9em;
+        color: #bbb;
+      }
+
+      @media (max-width: 768px) {
+        .categories {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .MedidasCapaFilme {
+          width: 80px;
+          height: 120px;
+        }
+
+        .nmFilme {
+          font-size: 10px;
+        }
+      }
+
+      .capaFilme:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .redirect-link {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .redirect-link:focus {
+        outline: 2px solid #ff9800;
+      }
+
+      .categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .category-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9em;
+        color: #fff;
+        transition: background 0.3s;
+      }
+
+      .category-card:hover {
+        background: #333;
+      }
+
+      .category-card .category-icon {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ff9800;
+      }
+
+      .category-card .title {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+      }
+
+      .category-card .info {
+        font-size: 0.8em;
+        color: #bbb;
+      }
+
+      .weekly-goals {
+        background: #2a2b3f;
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+
+      .weekly-goals h4 {
+        font-size: 1em;
+        margin-bottom: 5px;
+        color: #fff;
+      }
+
+      .weekly-goals p {
+        font-size: 0.9em;
+        color: #bbb;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .stats-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9em;
+        color: #fff;
+        transition: background 0.3s;
+      }
+
+      .stats-card:hover {
+        background: #333;
+      }
+
+      .stats-card .stat-number {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .stats-card .stat-label {
+        font-size: 0.8em;
+        color: #bbb;
+      }
+
+      .titulo {
+        width: 99%;
+        margin-top: 2%;
+        margin-bottom: 3%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nmTitulo {
+        -webkit-text-stroke: 0.5px white;
+        color: white;
+        font-size: 18px;
+      }
+      .seeAll {
+        margin-top: 1%;
+        color: red;
+        -webkit-text-stroke: 0.7px red;
+        font-size: 14px;
+        margin-left: -2%;
+      }
+      .seeAll:active {
+        color: rgb(71, 0, 0);
+        -webkit-text-stroke: 0.7px rgb(71, 0, 0);
+      }
+      .Playlist {
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+      }
+      .MedidasCapaFilme {
+        position: relative;
+        width: 120px;
+        height: 177px;
+        margin-top: 2%;
+        margin-right: 4%;
+        justify-content: center;
+        display: inline-block;
+        background-color: #0a0a0a;
+        border-radius: 7px;
+      }
+      .capaFilme {
+        width: 100%;
+        height: 100%;
+        border-radius: 7px;
+        margin-bottom: -5%;
+        position: relative;
+        z-index: 2;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .capaFilme:active {
+        opacity: 0.4;
+      }
+
+      .nmFilme {
+        width: 120px;
+        height: 42px;
+        word-wrap: break-word;
+        overflow: auto;
+        text-overflow: ellipsis;
+        white-space: normal;
+        scrollbar-width: none;
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        margin-top: 10px;
+      }
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .top-bar .icon {
+        font-size: 1.5em;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .navbar {
+  position: fixed; /* Fixa a barra no rodapé */
+  bottom: 0;
+  width: 95%;
+  height: 80px;
+  background-color: #19191b; /* Cor de fundo da navbar */
+  display: flex;
+  justify-content: space-around; /* Espaçamento uniforme entre os ícones */
+  align-items: center;
+  padding: 10px 0;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5); /* Sombra no topo da navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: white;
+}
+.nav-item img {
+  width: 24px; /* Tamanho do ícone */
+  height: 24px;
+  white-space: nowrap;
+  margin-bottom: 1px; /* Espaçamento entre ícone e texto */
+  filter: invert(100%); /* Faz os ícones ficarem brancos, se forem pretos */
+}
+.nav-item p {
+  margin: 0;
+}
+.nav-item:active {
+  filter: invert(60%);
+}
+.telaAtual {
+  display: inline-block;
+  align-items: center; /* Alinha verticalmente ícone e texto */
+  display: flex; /* Usar flexbox para alinhar os itens */
+  font-size: 14px;
+  gap: 8px;
+  -webkit-text-stroke: 0.1px rgb(255, 255, 255);
+  background-color: red;
+  width: 97px;
+  border-radius: 50px;
+  height: 43px;
+}
