@@ -10,6 +10,8 @@ Execute os comandos abaixo **apenas na primeira vez** que for usar o Git na máq
 
 ```bash
 git config --global user.name "Seu Nome"
+```
+```bash
 git config --global user.email "Seu email"
 
 ```
