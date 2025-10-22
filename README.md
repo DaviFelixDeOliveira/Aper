@@ -36,6 +36,10 @@ git clone https://github.com/DaviFelixDeOliveira/Aper_App_Filme.git
 ### Após suas alterações
 
 ```js
+git add .
+```
+
+```js
 
 git commit -m "Mensagem de commit"
 ```
