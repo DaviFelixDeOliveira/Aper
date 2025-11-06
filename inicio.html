@@ -1,588 +1,350 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"> <!-- Define a codificação de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
-    <title>Home</title> <!-- Título da página -->
-    <link rel="stylesheet" href="css/styleinicio.css"> <!-- Link para o arquivo CSS -->
+  <meta charset="utf-8" />
+  <title>Início - Playlists</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #091026;
+      --accent: #614bf2;
+      --muted: rgba(255,255,255,0.45);
+      --text: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    html,body { height:100%; margin:0; padding:0; }
+    body {
+      font-family: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:auto;
+    }
+
+    /* hero */
+    .slides {
+      width:100%;
+      height:50vh;
+      background-image: url("");
+      background-size: cover;
+      background-position:center;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+    }
+    .slides::after{
+      content:"";
+      position:absolute;inset:0;
+      background:linear-gradient(0deg, rgba(9,16,38,1) 0%, rgba(0,0,0,0) 40%);
+    }
+    .inicio-botao-assistir-slide{
+      position:absolute;bottom:6%;left:50%;transform:translateX(-50%);
+      width:180px;height:42px;border-radius:25px;border:none;
+      background:rgba(255,255,255,0.16);color:white;display:flex;
+      align-items:center;justify-content:center;gap:10px;cursor:pointer;z-index:2;font-weight:600;
+    }
+
+    /* container */
+    .container{ width:100%;max-width:1200px;margin:24px auto;padding:0 20px 100px; }
+    .sugeridos{ display:flex;flex-direction:column;gap:28px; }
+
+    /* playlist */
+    .lista{ display:flex;flex-direction:column;gap:12px; }
+    .lista-cabecalho{ display:flex;justify-content:space-between;align-items:center;gap:12px; }
+    .lista-titulo{ font-size:20px;font-weight:700;color:white; }
+    .lista-ver-mais{ color:var(--muted);font-size:13px;cursor:pointer; }
+
+    /* horizontal carousel */
+    .lista-obras{ display:flex;gap:16px;overflow-x:auto;padding-bottom:6px; }
+    .lista-obras::-webkit-scrollbar{ height:8px; }
+    .lista-obras::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.08); border-radius:8px; }
+
+    .obra{ flex:0 0 auto;width:160px;display:flex;flex-direction:column;gap:8px;cursor:pointer; }
+    .obra-capa{ width:160px;height:100px;border-radius:8px;background-size:cover;background-position:center;box-shadow:0 6px 30px rgba(0,0,0,0.6);transition:transform .18s; }
+    .obra:hover .obra-capa{ transform:translateY(-6px) scale(1.02); }
+    .obra-nome{ font-size:14px;line-height:1.2;color:white; }
+    .obra-sub{ font-size:12px;color:var(--muted); }
+
+    @media (min-width: 1024px){
+      .slides{ height:60vh; }
+      .obra{ width:177px; }
+      .obra-capa{ height:110px; width:177px; }
+    }
+
+    /* bottom navbar placeholder */
+    .navbar{ position:fixed; bottom:10px; left:50%; transform:translateX(-50%); width:calc(100% - 40px); max-width:520px; height:56px; border-radius:14px; background:rgba(255,255,255,0.03); display:flex; justify-content:space-around; align-items:center; backdrop-filter:blur(6px); box-shadow:0 10px 30px rgba(0,0,0,0.6); z-index:50; }
+    .nav-item{ color:var(--muted); font-size:18px; cursor:pointer; }
+    .nav-item.active{ color:var(--text); }
+
+    /* small adjustments to ensure remote images don't overflow */
+    img.capaFilme{ width:100%; height:100%; object-fit:cover; border-radius:8px; display:block; }
+  </style>
 </head>
 <body>
-    <!-- Tela de fade para transições -->
-    <div id="fadeScreen" class="fade-screen"></div>
-    <!-- Mensagem de recarregamento -->
-    <div id="refresh">Recarregando...</div>
+  <div class="slides">
+    <button class="inicio-botao-assistir-slide"><i class="fa-solid fa-play"></i> Assistir</button>
+  </div>
 
-    <!-- Seção do filme "Divertidamente" -->
-    <div class="tamanhoFilmeCatalogo" id="sombra">
+  <div class="container">
+    <div class="sugeridos">
+
+      <!-- === 1) Então é Natal... (mesclei os filmes existentes + seus filmes natalinos enviados) === -->
+      <div class="lista" id="playlist-entao-e-natal">
+        <div class="lista-cabecalho">
+          <label class="lista-titulo">Então é Natal...</label>
+          <label class="lista-ver-mais">Ver mais</label>
+        </div>
+        <div class="lista-obras">
+          <!-- mantive as obras originais + adicionei as covers fornecidas -->
+          <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Super Mario Bros. O Filme</label></div>
+
+          <!-- filmes natalinos (imagens/links que você passou convertidas pra capa inline) -->
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mlxKite1x1PgmIhJgAxNS9eHmH8.jpg');"></div><label class="obra-nome">Klaus</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/sy0vo1cmpKqwPRiMUiJ45jyLsX7.jpg');"></div><label class="obra-nome">O Grinch</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/ySmjHc3LZd4VmmIa6sgwkMIm6xl.jpg');"></div><label class="obra-nome">Esqueceram de Mim</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/dGiPJO75b9GmXqxvusbKlcYrDcg.jpg');"></div><label class="obra-nome">Esqueceram de Mim 2</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/16lk65YfrDFIr6evkWRjSeOOSws.jpg');"></div><label class="obra-nome">O Estranho Mundo de Jack</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/odKqOY6VE6C59YAdGHB0b5Havye.jpg');"></div><label class="obra-nome">Um Menino Chamado Natal</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/iHbHTn6awwTTu9kcfBe2hkTuWXS.jpg');"></div><label class="obra-nome">A Princesa e a Plebeia</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/AgkpsVBnOvYbmuR8Rg71NVE17Rh.jpg');"></div><label class="obra-nome">Crônicas de Natal</label></div>
+        </div>
+      </div>
+
+      <!-- === 2) Filmes Populares (preservado) === -->
+      <div class="lista" id="filmes-populares">
+        <div class="lista-cabecalho"><label class="lista-titulo">Filmes Populares</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/81T9IcPK3bF2RbJyKURa4rF4sxM.jpg');"></div><label class="obra-nome">O Frio da Morte</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/s303drBPhD6574TZSPXHK8ppGvg.jpg');"></div><label class="obra-nome">A Longa Marcha - Caminhe ou Morra</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/2rCj8WrP2DbEbQTFwBxRqwSg03d.jpg');"></div><label class="obra-nome">Os Roses: Até que a Morte os Separe</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/w5E75gF48xNfKXmBIsbWhiINwsi.jpg');"></div><label class="obra-nome">Good News</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/t6PAC48f3t6PgzX46wU0iefrd8D.jpg');"></div><label class="obra-nome">Nossa Culpa</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/i4o2aPGlnsxfPmDPF5lmlgjScyv.jpg');"></div><label class="obra-nome">Os Pestes</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/f8Sx0nzu1xITgVEHdutKQFU1jU8.jpg');"></div><label class="obra-nome">A Mulher na Cabine 10</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/fUyz81RMH230oMuuQB5bQVhDCXW.jpg');"></div><label class="obra-nome">A Grande Viagem da Sua Vida</label></div>
+        </div>
+      </div>
+
+      <!-- === 3) Nos Cinemas (preservado) === -->
+      <div class="lista" id="nos-cinemas">
+        <div class="lista-cabecalho"><label class="lista-titulo">Nos Cinemas</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d3Bg0OTEr42eOJ9oEypdeeRrMmJ.jpg');"></div><label class="obra-nome">Thunderbolts</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/k32XKMjmXMGeydykD32jfER3BVI.jpg');"></div><label class="obra-nome">G20</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/nnx7q1ucLOfFrpAYvGmSEtbWf3L.jpg');"></div><label class="obra-nome">O Agente Secreto</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/w600_and_h900_bestv2/ircyMQMWf2crlsIykVoBUpeo3B.jpg');"></div><label class="obra-nome">Lilo & Stitch (Live action)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7Q2CmqIVJuDAESPPp76rWIiA0AD.jpg');"></div><label class="obra-nome">Karate Kid: Lendas</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rMKL8ubl7pXpe9NUTIgsaFK9D6S.jpg');"></div><label class="obra-nome">Invocação do Mal 4: O Último Ritual</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mZxsN0bf6Ib2xIz25dxXQRyphlw.jpg');"></div><label class="obra-nome">A Substância</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/1JEP5gLuDGCs686d2Yi6DMJP9XI.jpg');"></div><label class="obra-nome">Guerreiras do K-Pop</label></div>
+        </div>
+      </div>
+
+      <!-- === 4) Nacionais (preservado) === -->
+      <div class="lista" id="nacionais">
+        <div class="lista-cabecalho"><label class="lista-titulo">Nacionais</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/g52pHwOgfozKB9rNh6NiuIJMUas.jpg');"></div><label class="obra-nome">Cidade de Deus</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/nYdZUbNPgrphcdZ6dr9diqp2fiI.jpg');"></div><label class="obra-nome">Tropa de Elite</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/AerUQBXkSjALUSwVlInKlPd0yqq.jpg');"></div><label class="obra-nome">Bacurau</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9h5BsxRmxLAvASADo2VcTlTUdb0.jpg');"></div><label class="obra-nome">Que Horas Ela Volta?</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/veieWEMmBDVkkpimgnJzoNDdcfL.jpg');"></div><label class="obra-nome">Central do Brasil</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wBVRle1dLtJOKKAHod8YbwB87D5.jpg');"></div><label class="obra-nome">O Auto da Compadecida</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/c01585ayEGyCgu3ZD8burHup44.jpg');"></div><label class="obra-nome">Meu Nome Não é Johnny</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/hMvrBCSzSLZ7x79b73b3ZbGRBhL.jpg');"></div><label class="obra-nome">Se Eu Fosse Você</label></div>
+        </div>
+      </div>
+
+      <!-- === 5) Clássicos do Cinema (preservado) === -->
+      <div class="lista" id="classicos">
+        <div class="lista-cabecalho"><label class="lista-titulo">Clássicos do Cinema</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7nfMHfkiu8Z8JxQranJvYWwPHtS.jpg');"></div><label class="obra-nome">O Poderoso Chefão</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/DpwUG9P2KQt08GVfR8jDAlZo71.jpg');"></div><label class="obra-nome">Forrest Gump</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lzGTOie3M3Adb4eIAXqolDuxm3S.jpg');"></div><label class="obra-nome">Jumanji</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mUQq6WcdRBAyqIbmbGjxdOycDrR.jpg');"></div><label class="obra-nome">Titanic</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/tfNuePdHrP9fp6K2VTJwHKKJf8C.jpg');"></div><label class="obra-nome">Casablanca</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rCMuTyJGT2GJzXcvWeYAVHQQRFS.jpg');"></div><label class="obra-nome">Clube da Luta</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wBoPj01HO50WBPHb5C4AHC9TdKv.jpg');"></div><label class="obra-nome">O Iluminado</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9oOLxsBalS3hQAvVt8dKRF1gMfG.jpg');"></div><label class="obra-nome">Jurassic Park (1993)</label></div>
+        </div>
+      </div>
+
+      <!-- === 6) Superação e Coragem (preservado) === -->
+      <div class="lista" id="superacao">
+        <div class="lista-cabecalho"><label class="lista-titulo">Superação e Coragem</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/otmFt1Olxdo1QbHk1V3v13IoIeC.jpg');"></div><label class="obra-nome">À Procura da Felicidade</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/5OpZA10CF2R8HT3f055omYAuN0B.jpg');"></div><label class="obra-nome">Invencível</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/pkWTnRGILTW0wnhS4erXGDrwYZd.jpg');"></div><label class="obra-nome">127 Horas</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9DoR4jZoW7wpsmxMgY6wMVehEl0.jpg');"></div><label class="obra-nome">O Jogo da Imitação</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/akBmvxg9CsyMxA589iNjZwWHOJa.jpg');"></div><label class="obra-nome">O Menino que Descobriu o Vento</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/tcJsL74S9WOB8dWuyyxEiJG86yX.jpg');"></div><label class="obra-nome">Milagre na Cela 7</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/b7xQ5fuyVO4c24igizCfPgF6n7q.jpg');"></div><label class="obra-nome">Extraordinário</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/5UJoHrXgVbsJLxP2MM1iR4fQPuK.jpg');"></div><label class="obra-nome">Soul Surfer</label></div>
+        </div>
+      </div>
+
+      <!-- === 7) Universo Marvel (preservado) === -->
+      <div class="lista" id="universo-marvel">
+        <div class="lista-cabecalho"><label class="lista-titulo">Universo Marvel</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uu82iyWC38j4V4plb32Mbk16NFN.jpg');"></div><label class="obra-nome">Homem de Ferro (2008)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/boEDtWVdGTH6ahxXY4BjyKiq8xC.jpg');"></div><label class="obra-nome">Capitão América: O Primeiro Vingador (2011)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/g3v0G2IAFSoaf1VfkaS6mFQwp4X.jpg');"></div><label class="obra-nome">Thor (2011)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/m6IThPXNhSMltKvGZRet8aYNrr3.jpg');"></div><label class="obra-nome">Os Vingadores (2012)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/A6H1U9nejD24SOmDforDs4pjbev.jpg');"></div><label class="obra-nome">Guardiões da Galáxia (2014)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/vJnGmCSt9aKiSmla663xv9MSnp3.jpg');"></div><label class="obra-nome">Pantera Negra (2018)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/566hWfsfyR9zQF0nY3oBUtghfKb.jpg');"></div><label class="obra-nome">Vingadores: Guerra Infinita (2018)</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/dvI62PBuiYI4d0IaRfw8a0Hi05x.jpg');"></div><label class="obra-nome">Doutor Estranho no Multiverso da Loucura (2022)</label></div>
+        </div>
+      </div>
+
+      <!-- === 8) Viagem no Tempo (preservado) === -->
+      <div class="lista" id="viagem-no-tempo">
+        <div class="lista-cabecalho"><label class="lista-titulo">Viagem no Tempo</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uxFodTcKu1araYhpzWTDEcBlvxH.jpg');"></div><label class="obra-nome">O Exterminador do Futuro</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/fZsr8GvYwC7Qamaw7NMHO9ZXfB0.jpg');"></div><label class="obra-nome">Interestelar</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/daVMmVg8ezEPDrR3BXnlhdVownF.jpg');"></div><label class="obra-nome">Looper</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/j617XPP3HVTViGdK0jhvzvh2XE1.jpg');"></div><label class="obra-nome">O Homem do Futuro</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mCnrZKuj7emHgzUyTQQopZhGkvj.jpg');"></div><label class="obra-nome">Feitiço do Tempo</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/o3wddBGh0ONY3wqDNKSvqTBSkly.jpg');"></div><label class="obra-nome">Meia-Noite em Paris</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/odJyfLpE22RLNs9vvTB023yfxk8.jpg');"></div><label class="obra-nome">Projeto Almanaque</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lBF5UPapR8yDimjxggdYOFSxCrP.jpg');"></div><label class="obra-nome">Efeito Borboleta</label></div>
+        </div>
+      </div>
+
+      <!-- === 9) Filmes Bíblicos (preservado) === -->
+      <div class="lista" id="biblicos">
+        <div class="lista-cabecalho"><label class="lista-titulo">Filmes Bíblicos</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d240UBMaCEXwJwjz7WgrVGrZQEQ.jpg');"></div><label class="obra-nome">A Paixão de Cristo</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/rTvxSFiT4wFuzkwcC59ljWnmeVI.jpg');"></div><label class="obra-nome">Os Dez Mandamentos</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/zBFDv6OUvMfwqzzmzMMolLcSRnu.jpg');"></div><label class="obra-nome">O Filho de Deus</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/mxlh9jE30nLAoHZpMfFRKx5Zwyg.jpg');"></div><label class="obra-nome">Rei Davi</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/or5ISKhlkMCds9rDlEko52YRtBs.jpg');"></div><label class="obra-nome">O Príncipe do Egito</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/92Lg5uqQL6hiqioYB3UFqHzo2hk.jpg');"></div><label class="obra-nome">Noé</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/zR14k5yOquUS2f9SBaEsXYiJuLZ.jpg');"></div><label class="obra-nome">Êxodo: Deuses e Reis</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/n88p2RDLHfaa3qfOAiWVR5ANeY8.jpg');"></div><label class="obra-nome">José: O Rei dos Sonhos</label></div>
+        </div>
+      </div>
+
+    
+
+      <!-- === 11) Filmes de Anime (preservado) === -->
+      <div class="lista" id="anime">
+        <div class="lista-cabecalho"><label class="lista-titulo">Filmes de Anime</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/qg0P94wHVrrozZkxfcXx0w5fHl.jpg');"></div><label class="obra-nome">Your Name</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/ukfI9QkU1aIhOhKXYWE9n3z1mFR.jpg');"></div><label class="obra-nome">A Viagem de Chihiro</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/aC4oNwvmdFaB1MX60Ww0Vc79cgd.jpg');"></div><label class="obra-nome">O Serviço de Entregas da Kiki</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/71MtpBSywWmHeSG7nUWUeBNPOMv.jpg');"></div><label class="obra-nome">O Tempo com Você</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gzZ5FPUlD0BoX6L60EkrznZ3lw0.jpg');"></div><label class="obra-nome">Dragon Ball Super: Broly</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gVEt8DGjq0V2cH7tqYRb90iuhdj.jpg');"></div><label class="obra-nome">One Piece Film: Red</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/as8kPzYUf2L2da7k8SXgAsHun2J.jpg');"></div><label class="obra-nome">Meu Amigo Totoro</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lrACtADbyOCEK2K3gU7ZL5LYXR6.jpg');"></div><label class="obra-nome">Suzume</label></div>
+        </div>
+      </div>
+
+      <!-- === 12) Nova: Para não assistir sozinho (Terror) === -->
+      <div class="lista" id="terror">
+        <div class="lista-cabecalho"><label class="lista-titulo">Para não assistir sozinho</label><label class="lista-ver-mais">Ver mais</label></div>
+        <div class="lista-obras">
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/2Goxfvu5hKqOC1R84A9S0QVPzoa.jpg');"></div><label class="obra-nome">A Bruxa de Blair</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://upload.wikimedia.org/wikipedia/pt/4/43/Supernatural-Temporada7_%28Blu-ray%29.jpg');"></div><label class="obra-nome">Ouija: Origem do Mal</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rBcFsAO021aCbXCr2qPG5xchxyG.jpg');"></div><label class="obra-nome">It: A Coisa</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/224vr5QIvVHSBlhUjJ8giPsU5eq.jpg');"></div><label class="obra-nome">Corra!</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/4dfGwafmVjMBpKaO0LHOSrGkAHZ.jpg');"></div><label class="obra-nome">A Entidade</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9VOmHfWzr8K2rvkTvyyeQghvQPp.jpg');"></div><label class="obra-nome">A Mulher de Preto 2</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/3vuqPp5GVIkmwK7x57CjftExILn.jpg');"></div><label class="obra-nome">Sobrenatural</label></div>
+          <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rQCvBeiBaxCMVbMLb1LvuCdmFcH.jpg');"></div><label class="obra-nome">Olhos Famintos</label></div>
+        </div>
+      </div>
+
+    <!-- === 13) Nova: O melhor da comédia === -->
+<div class="lista" id="comedia">
+  <div class="lista-cabecalho"><label class="lista-titulo">O melhor da comédia</label><label class="lista-ver-mais">Ver mais</label></div>
+  <div class="lista-obras">
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Até Que a Fuga os Separe</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Gente Grande</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Gente Grande 2</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Esposa de Mentirinha</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Como se Fosse a Primeira Vez</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">As Branquelas</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Vovó... Zona</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Os Farofeiros</label></div>
+  </div>
+</div>
+
+      <!-- === 14) Nova: Caiu um cisco no meu olho... (emocionais) === -->
+<div class="lista" id="emocionais">
+  <div class="lista-cabecalho"><label class="lista-titulo">Caiu um cisco no meu olho...</label><label class="lista-ver-mais">Ver mais</label></div>
+  <div class="lista-obras">
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">A Cabana</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">A Vida é Bela</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Ponte Para Terabítia</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">A Culpa é das Estrelas</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Meu Primeiro Amor</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Extraordinário</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Quatro Vidas de um Cachorro</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">A Cinco Passos de Você</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Como eu Era Antes de Você</label></div>
+  </div>
+</div>
+
+     <!-- === 15) Nova: Momento em família === -->
+<div class="lista" id="familia">
+  <div class="lista-cabecalho"><label class="lista-titulo">Momento em família</label><label class="lista-ver-mais">Ver mais</label></div>
+  <div class="lista-obras">
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/4wOIPzzeiuPcCFb0sGTmUQecyrF.jpg');"></div><label class="obra-nome">Jumanji: Bem-vindo à Selva</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uxn7MiSTlZdCuF8WyCXRW9DN8kr.jpg');"></div><label class="obra-nome">Hotel Transilvânia: Transformonstrão</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lSRlQnNSOc96UpCidOHbvQl0WKW.jpg');"></div><label class="obra-nome">Divertida Mente 2</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gbx523WxsFLdLmcUjzOFGezwcGs.jpg');"></div><label class="obra-nome">O Hobbit</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/zun7wiyuxrLrrsZQkoGc767QG8Q.jpg');"></div><label class="obra-nome">Uma Noite no Museu</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/j1ZEORZZ02wFTmmZbmcwivU6jJd.jpg');"></div><label class="obra-nome">De Repente 30</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/p0nDlV6hdtqEabq69rnZe6q1INs.jpg');"></div><label class="obra-nome">Jurassic World: Domínio</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wf9C6iqY9tXG7TrQDg3E4Flgap7.jpg');"></div><label class="obra-nome">Sing: Quem Canta Seus Males Espanta</label></div>
+  </div>
+</div>
+<!-- === 16) Nova: Além da realidade (Ficção Científica) === -->
+<div class="lista" id="ficcao">
+  <div class="lista-cabecalho"><label class="lista-titulo">Além da realidade</label><label class="lista-ver-mais">Ver mais</label></div>
+  <div class="lista-obras">
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Transformers</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Harry Potter e a Pedra Filosofal</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">A Saga Crepúsculo: Amanhecer - Parte 1</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Star Wars 7: O Despertar da Força</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Matrix</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">Avatar</label></div>
+    <div class="obra"><div class="obra-capa" style="background-image:url('');"></div><label class="obra-nome">De Volta Para o Futuro</label></div>
+  </div>
+</div>
+
     </div>
+  </div>
 
-    <!-- Slides -->
-    <section class="slider_container">
-      <section class="slider">
-        <div class="slide one" onclick="window.location.href='verConteudo.html?imdbId=tt16366836'">
-        </div>
-        <div class="slide two" onclick="window.location.href='verConteudo.html?imdbId=tt22022452'">
-        </div>
-        <div class="slide three" onclick="window.location.href='verConteudo.html?imdbId=tt26731216'">
-        </div>
-        <div class="slide four" onclick="window.location.href='verConteudo.html?imdbId=tt29268110'">
-        </div>
-        <div class="slide four" onclick="window.location.href='verConteudo.html?imdbId=tt14961016'">
-        </div>
-      </section>
-    </section>
+  <!-- bottom navbar (placeholder) -->
+  <div class="navbar" aria-hidden="true">
+    <div class="nav-item active"><i class="fa-solid fa-house"></i></div>
+    <div class="nav-item"><i class="fa-solid fa-magnifying-glass"></i></div>
+    <div class="nav-item"><i class="fa-solid fa-clapperboard"></i></div>
+    <div class="nav-item"><i class="fa-solid fa-user"></i></div>
+  </div>
 
-    <!-- Seção de gêneros de filmes -->
-    <div class="generos">
-        <div class="generos-scroll">
-            <div class="item active" style="-webkit-text-stroke: 0.7px white;color: white;">
-                <b style="color:red;font-size: 18px;-webkit-text-stroke: 0.7px #ff0000">l</b>
-                Tudo
-            </div>
-            <a href="drama.html">
-                <div class="item">Filmes</div>
-            </a>
-            <a href="movie.html">
-                <div class="item">Séries</div>
-            </a>
-            <a href="anime.html">
-                <div class="item">Comédia</div>
-            </a>
-            <a href="tvshow.html">
-                <div class="item">Faroeste</div>
-            </a>
-            <a href="terror.html">
-                <div class="item">Terror</div>
-            </a>
-            <a href="faroeste.html">
-                <div class="item">Drama</div>
-            </a>
-            <a href="comedia.html">
-                <div class="item">Ação</div>
-            </a>
-            <a href="action.html">
-                <div class="item">Aventura</div>
-            </a>
-            <a href="animation.html">
-                <div class="item">Animação</div>
-            </a>
-            <a href="romance.html">
-                <div class="item">Romance</div>
-            </a>
-        </div>
-    </div>
-
-    <div class="bordas">
-        <!-- Seção de filmes de Natal -->
-        <br>
-        <div class="titulo">
-            <div class="nmTitulo">Então é Natal...</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt4729430">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/19/10/09/17/03/0582059.jpg">
-                    <p class="nmFilme">Klaus</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0170016">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/89/69/60/20395922.jpg">
-                    <p class="nmFilme">O Grinch</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0099785">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/93/93/95/20287484.jpg">
-                    <p class="nmFilme">Esqueceram de Mim</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0104431">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/medias/nmedia/18/93/93/99/20287494.jpg">
-                    <p class="nmFilme">Esqueceram de Mim 2: Perdido em Nova York</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0107688">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/90/48/68/20099172.jpg">
-                    <p class="nmFilme">O Estranho Mundo de Jack</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt10187208">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://www.justwatch.com/images/poster/252966388/s718/a-boy-called-christmas.jpg">
-                    <p class="nmFilme">Um Menino Chamado natal</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt8954732">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://media.fstatic.com/y7_BCIVJckMYy7IOnBEfYCGG4ok=/322x478/smart/filters:format(webp)/media/movies/covers/2018/11/8cEOKJHhYV4NSb2MHdt9RmzEPUf.jpg">
-                    <p class="nmFilme">A Princesa e a Plebeia</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2990140">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/18/10/10/20/06/1581256.jpg">
-                    <p class="nmFilme">Crônicas de Natal</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de filmes de terror -->
-        <div class="titulo">
-            <div class="nmTitulo">Para não assistir sozinho</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0185937">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/S/pv-target-images/55c94bd94a5a91e7cac3d69b704c2d538d5913c00f99f1954ec8673be8f251d1.jpg">
-                    <p class="nmFilme">A Bruxa de Blair</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt4361050">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/pictures/16/06/23/18/55/294204.jpg">
-                    <p class="nmFilme">Ouija: Origem do Mal</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1396484">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://musicart.xboxlive.com/7/b77e4900-0000-0000-0000-000000000002/504/image.jpg">
-                    <p class="nmFilme">It: A coisa</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt5052448">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/17/04/19/21/08/577190.jpg">
-                    <p class="nmFilme">Corra!</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1922777">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/medias/nmedia/18/91/31/38/20277419.jpg">
-                    <p class="nmFilme">A Entidade</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2339741">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://media.fstatic.com/_qfyZj1YbTtAHbfHDukcoO3RbOg=/322x478/smart/filters:format(webp)/media/movies/covers/2017/01/2014_A_MULHER_DE_PRETO_2_-_ANJO_DA_MORTE_THE_WOMAN_IN_BLACK_-_ANGE_j7R3RJL.jpg">
-                    <p class="nmFilme">A Mulher De Preto 2: Anjo Da Morte</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=1622&tipo=serie">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/ovFzkkKknAo2SbM2DfOabxRvzmy.jpg">
-                    <p class="nmFilme">Sobrenatural</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0263488">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://upload.wikimedia.org/wikipedia/pt/a/ae/Jeepers_Creepers_capa.jpg">
-                    <p class="nmFilme">Olhos Famintos</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de filmes de comédia -->
-        <div class="titulo">
-            <div class="nmTitulo">O melhor da comédia</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0123964">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/S/pv-target-images/503d47d7093e4cd483ada2dd1b81e00ee023ff76979684a82982696c4ab6cd49.jpg">
-                    <p class="nmFilme">Ate Que a Fuga os Separe</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1375670">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/c_310_420/pictures/210/299/21029996_20130821205722213.jpg">
-                    <p class="nmFilme">Gente Grande</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2191701">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/210/049/21004903_20130510170049514.jpg">
-                    <p class="nmFilme">Gente Grande 2</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1564367">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/S/pv-target-images/b27eaebc29f97831ca43bf4cd401b4871928ee908fbd800cb2f6ab11aab5d7c2.jpg">
-                    <p class="nmFilme">Esposa de Mentirinha</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0343660">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/20/11/23/14/35/4981975.jpg">
-                    <p class="nmFilme">Como se Fosse a Primeira Vez</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0381707">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/97/52/82/20534159.jpg">
-                    <p class="nmFilme">As Branquelas</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0208003">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/pictures/14/05/06/21/20/243550.jpg">
-                    <p class="nmFilme">Vovó... Zona</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt7882104">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/18/01/03/19/24/3938254.jpg">
-                    <p class="nmFilme">Os Farofeiros</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de filmes emocionais -->
-        <div class="titulo">
-            <div class="nmTitulo">Caiu um cisco no meu olho...</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2872518">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/I/71ydFW-qgQL._AC_UF1000,1000_QL80_.jpg">
-                    <p class="nmFilme">A Cabana</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0118799">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/87/87/63/19962446.jpg">
-                    <p class="nmFilme">A Vida é Bela</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0398808">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/210/444/21044474_20130926180447162.jpg">
-                    <p class="nmFilme">Ponte Para Terabitia</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2582846">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/14/01/23/14/12/101764.jpg">
-                    <p class="nmFilme">A Culpa é das Estrelas</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2543472">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/pictures/17/11/28/18/32/3262971.jpg">
-                    <p class="nmFilme">Extraordinário</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1753383">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/16/08/31/23/26/562395.png">
-                    <p class="nmFilme">Quatro Vidas de um Cachorro</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt6472976">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/pictures/19/02/19/15/31/1517190.jpg">
-                    <p class="nmFilme">A Cinco Passos de Você</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2674426">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/I/61yY8EBimFL._AC_UF1000,1000_QL80_.jpg">
-                    <p class="nmFilme">Como eu Era Antes de Você</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de filmes para assistir em família -->
-        <div class="titulo">
-            <div class="nmTitulo">Momento em família</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2283362">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/pictures/17/11/28/19/03/5043910.jpg">
-                    <p class="nmFilme">Jumanji: Bem-vindo à Selva</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt9848626">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQijqkmVNbfHpXcIiw-FRvTReq1-MZzijP4Wrt85MituGsLZ2X0-7H_AvstKwBpzOPyIZY&usqp=CAU">
-                    <p class="nmFilme">Hotel Transilvânia: Transformonstrão</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt22022452">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://lumiere-a.akamaihd.net/v1/images/gife454xsaa8wv-_3e8071e7.jpeg?region=0%2C0%2C1638%2C2048">
-                    <p class="nmFilme">Divertida Mente 2</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0903624">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/I/81arD48HpRL._AC_UF1000,1000_QL80_.jpg">
-                    <p class="nmFilme">O Hobbit</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0477347">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://cinemacomrapadura.com.br/imagens/2014/09/20140911-uma-noite-no-museu-poster.jpg">
-                    <p class="nmFilme">Uma Noite no Museu</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0337563">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/medias/nmedia/18/93/75/86/20275816.jpg">
-                    <p class="nmFilme">De Repente 30</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt8041270">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://upload.wikimedia.org/wikipedia/pt/b/b0/Jurassic_World_Dominion.jpeg">
-                    <p class="nmFilme">Jurassic World: Domínio</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt3470600">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvIRR6ANdVakWI66GrmRrcJXlVnFn_qCcVg&s">
-                    <p class="nmFilme">Sing: Quem Canta Seus Males Espanta</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de filmes de ficção científica -->
-        <div class="titulo">
-            <div class="nmTitulo">Além da realidade</div>
-            <label class="seeAll">Ver mais</label>
-        </div>
-        <div class="Playlist">
-            <!-- Cada filme é representado por um container -->
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0418279">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://upload.wikimedia.org/wikipedia/pt/e/ee/Transformers-poster.jpg">
-                    <p class="nmFilme">Transformers</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0241527">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://upload.wikimedia.org/wikipedia/pt/1/1d/Harry_Potter_Pedra_Filosofal_2001.jpg">
-                    <p class="nmFilme">Harry Potter e a Pedra Filosofal</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt1324999">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/87/91/89/20028742.jpg">
-                    <p class="nmFilme">A Saga Crepúsculo: Amanhecer - Parte 1</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt2488496">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/I/81QWAGT3FdL._AC_UF894,1000_QL80_.jpg">
-                    <p class="nmFilme">Star Wars 7: O Despert ar da Força</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0133093">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img2.acsta.net/medias/nmedia/18/91/08/82/20128877.jpg">
-                    <p class="nmFilme">Matrix</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0499549">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg">
-                    <p class="nmFilme">Avatar</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0088763">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/90/95/62/20122008.jpg">
-                    <p class="nmFilme">De Volta Para o Futuro</p>
-                </a>
-            </div>
-            <div class="MedidasCapaFilme">
-                <a class="redirect-link" href="verConteudo.html?imdbId=tt0088247">
-                    <img crossorigin="anonymous" class="capaFilme" src="https://br.web.img3.acsta.net/medias/nmedia/18/92/90/99/20224665.jpg">
-                    <p class="nmFilme">O Exterminador do Futuro</p>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Barra de navegação -->
-    <div class="navbar">
-        <div class="nav-item" style="margin-top: 0%;">
-            <div class="telaAtual">
-                <img src="imagens/home.svg" alt="Home" style="margin-left: 13%;margin-bottom: 1%;">
-                <label style="margin-bottom: -1%;">Início</label>
-            </div>
-        </div>
-        <a href="pesquisa.html">
-            <div class="nav-item">
-                <img src="imagens/search.svg" alt="Search">
-            </div>
-        </a>
-        <a href="jogos.html">
-            <div class="nav-item">
-                <img src="imagens/game.svg" alt="Games">
-            </div>
-        </a>
-        <a href="perfil.html">
-            <div class="nav-item">
-                <img src="imagens/profile.svg" alt="Profile">
-            </div>
-        </a>
-    </div>
-
-    <br><br><br><br>
-
-    <script>
-        // Seleciona todos os slides e pontos do carrossel
-        const slides = document.querySelectorAll(".carousel-slide");
-        const dots = document.querySelectorAll(".dot");
-        let currentIndex = 0;
-
-        // Atualiza o carrossel com base no índice
-        function updateCarousel(index) {
-            const offset = index * -100; // Mover para a esquerda baseado no índice
-            slides.forEach(slide => {
-                slide.style.transform = `translateX(${offset}%)`;
-            });
-            dots.forEach(dot => dot.classList.remove("active"));
-            dots[index].classList.add("active");
-        }
-
-        // Adiciona evento de clique aos pontos do carrossel
-        dots.forEach((dot, index) => {
-            dot.addEventListener("click", () => {
-                currentIndex = index;
-                updateCarousel(index);
-            });
-        });
-
-        // Muda automaticamente a cada 5 segundos
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            updateCarousel(currentIndex);
-        }, 1000000); // Tempo de mudança
-
-        // Função para obter a cor dominante de uma imagem
-        function getDominantColor(imgElement, callback) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = imgElement.naturalWidth;
-            canvas.height = imgElement.natural Height;
-            ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-            let r = 0, g = 0, b = 0, count = 0;
-            for (let i = 0; i < imageData.length; i += 4) {
-                r += imageData[i];
-                g += imageData[i + 1];
-                b += imageData[i + 2];
-                count++;
-            }
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
-            callback(`rgba(${r},${g},${b}, 0.5)`); // Retorna a cor dominante
-        }
-
-        // Aplica a cor dominante como sombra nas capas dos filmes
-        document.querySelectorAll('.MedidasCapaFilme').forEach(container => {
-            const img = container.querySelector('.capaFilme');
-            img.addEventListener('load', () => {
-                getDominantColor(img, color => {
-                    img.style.boxShadow = `0 0 10px ${color}`; // Aplica o box-shadow
-                });
-            });
-        });
-
-        // Aguarda o carregamento completo do DOM
-        document.addEventListener("DOMContentLoaded", () => {
-            // Seleciona todos os containers com a classe 'Playlist'
-            const playlists = document.querySelectorAll('.Playlist');
-
-            // Itera sobre cada container para embaralhar os filmes individualmente
-            playlists.forEach(playlist => {
-                // Converte os filhos (as divs) em um array para manipulação
-                const filmes = Array.from(playlist.children);
-
-                // Embaralha as divs usando o algoritmo de Fisher-Yates
-                for (let i = filmes.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [filmes[i], filmes[j]] = [filmes[j], filmes[i]];
-                }
-
-                // Remove todas as divs do container original
-                playlist.innerHTML = "";
-
-                // Adiciona as divs embaralhadas de volta ao container
-                filmes.forEach(filme => playlist.appendChild(filme));
-            });
-        });
-
-        // Detecta toques para recarregar a página
-        document.addEventListener('DOMContentLoaded', () => {
-            let touchStartY = 0;  // Posição inicial do toque
-            let touchEndY = 0;    // Posição final do toque
-            const refreshElement = document.getElementById('refresh');
-
-            // Detecta o início do toque
-            document.addEventListener('touchstart', (event) => {
-                touchStartY = event.touches[0].clientY;
-            });
-
-            // Detecta o fim do toque (movimento do dedo)
-            document.addEventListener('touchend', (event) => {
-                touchEndY = event.changedTouches[0].clientY;
-
-                // Verifica se a página está no topo (scroll top é 0)
-                if (window.scrollY === 0 && touchEndY - touchStartY > 50) {
-                    // Mostra o elemento de recarga
-                    refreshElement.classList.add('show');
-
-                    // Simula um "recarregamento" após 1 segundo (ajuste conforme necessário)
-                    setTimeout(() => {
-                        location.reload();  // Recarrega a página
-                    }, 1000);  // A animação dura 1 segundo
-                }
-            });
-        });
-
-        // Captura todos os links com a classe 'redirect-link'
-        const links = document.querySelectorAll('.redirect-link');
-
-        // Função para ativar o efeito de fade
-        function handleLinkClick(event) {
-            event.preventDefault(); // Previne o comportamento padrão do link
-
-            // Adiciona a classe 'active' à tela preta para fazer o fade-in
-            const fadeScreen = document.getElementById('fadeScreen');
-            fadeScreen.classList.add('active');
-
-            // Acessa o href do link corretamente
-            const href = event.currentTarget.href;
-
-            // Redireciona após a animação (tempo igual ao da animação fade)
-            setTimeout(() => {
-                // Redireciona
-                window.location.href = href;
-            }, 500); // O tempo da animação de fade (0.5s)
-        }
-
-        // Adiciona o evento de clique a todos os links
-        links.forEach(link => {
-            link.addEventListener('click', handleLinkClick);
-        });
-    </script>
+  <script>
+    // utilidade: troca global de placeholder cover se quiser
+    (function(){
+      const COVER = "";
+      // Para trocar todas as capas por essa COVER automaticamente, descomente a linha abaixo:
+      // document.querySelectorAll('.obra-capa').forEach(e => e.style.backgroundImage = `url('${COVER}')`);
+    })();
+  </script>
 </body>
 </html>
