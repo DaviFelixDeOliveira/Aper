@@ -1,0 +1,132 @@
+<div class="tela-assistir">
+    <div class="assistir-conteudo">
+        <div class="assistir-cabecalho">
+            <button class="assistir-botao-voltar" id="assistir-botao-voltar"></button>
+            <label>Detalhes</label>
+            <button class="assistir-botao-assistido" id="assistir-botao-assistido"></button>
+        </div>
+        <!-- Imagem de capa e informações do cabeçalho -->
+        <div class="assistir-obra-capa" id="assistir-obra-capa"></div>
+        <div class="assistir-obra-informacoes">
+            <label class="assistir-obra-tipo" id="assistir-obra-tipo"></label>
+            <div class="assistir-obra-titulo-acoes">
+                <label class="assistir-obra-titulo" id="assistir-obra-titulo"></label>
+                <div class="assistir-acoes">
+                    <div>
+                        <svg
+                            width="40px"
+                            height="40px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <rect width="24" height="24" fill="none"/>
+                            <path
+                                d="M12 6V18"
+                                stroke="#ffffff"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M6 12H18"
+                                stroke="#ffffff"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <svg
+                            width="40px"
+                            height="40px"
+                            viewBox="-9 -7 64 64"
+                            class="assistir-obra-curtir"
+                            id="assistir-obra-curtir"
+                        >
+                            <path
+                                d="M15 8C8.92487 8 4 12.9249 4 19C4 30 17 40 24 42.3262C31 40 44 30 44 19C44 12.9249 39.0751 8 33 8C29.2797 8 25.9907 9.8469 24 12.6738C22.0093 9.8469 18.7203 8 15 8Z"
+                                fill="none"
+                                stroke="white"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <label class="assistir-obra-genero" id="assistir-obra-genero"></label>
+        </div>
+        <!-- Sinopse -->
+        <label class="assistir-obra-sinopse" id="assistir-obra-sinopse"></label>
+        <div class="assistir-obra-review">
+            <div class="assistir-obra-review-item">
+                <label class="review-texto" id="classificacao"></label>
+            </div>
+            <div class="assistir-obra-review-item">
+                <label class="review-texto" id="ano-lancamento"></label>
+            </div>
+            <div class="assistir-obra-review-item">
+                <div class="assistir-obra-icone-estrela"></div>
+                <label class="review-texto" id="avaliacao"></label>
+            </div>
+            <div class="assistir-obra-review-item">
+                <div class="assistir-obra-icone-duracao"></div>
+                <label class="review-texto" id="duracao"></label>
+            </div>
+        </div>
+        <!-- Botões dos servidores -->
+        <div class="assistir-container">
+            <button class="assistir-botao-principal" id="botao-assistir">
+                <span>Assistir</span>
+                <span class="seta">
+                    <svg
+                        width="15px"
+                        height="15px"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="5 5 15 10"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
+                            fill="currentColor"
+                        ></path>
+                    </svg>
+                </span>
+            </button>
+            <div class="assistir-dropdown" id="dropdown-servidores">
+                <button class="assistir-botao-servidor" data-servidor="1">
+                    <span>Servidor 1</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="2">
+                    <span>Servidor 2</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="3">
+                    <span>Servidor 3</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="4">
+                    <span>Servidor 4</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="5">
+                    <span>Servidor 5</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="6">
+                    <span>Servidor 6 (Inglês)</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="7">
+                    <span>Servidor 7 (Inglês)</span>
+                </button>
+                <button class="assistir-botao-servidor" data-servidor="8">
+                    <span>Servidor 8 (Inglês)</span>
+                </button>
+            </div>
+        </div>
+        <div class="elenco">
+            <label class="elenco-titulo">Elenco</label>
+            <div class="assistir-elenco" id="assistir-elenco"></div>
+            <!-- O elenco será carregado dinamicamente aqui -->
+        </div>
+    </div>
+</div>

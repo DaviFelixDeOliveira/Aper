@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.aper.app" version="1.0.1"
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+    <name>Aper</name>
+    <description>O universo do entretenimento</description>
+    <author email="teuemail@dominio.com" href="https://tuaempresa.com">
+        Equipe Eska
+    </author>
+
+    <content src="principal.html" />
+
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <!-- Plugin de URL Scheme -->
+    <plugin name="cordova-plugin-customurlscheme" spec="~5.0.2">
+        <variable name="URL_SCHEME" value="aper" />
+        <variable name="ANDROID_SCHEME" value="aper" />
+        <variable name="ANDROID_HOST" value="open" />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
+
+    <preference name="android-targetSdkVersion" value="34" />
+
+    <!-- SplashScreen -->
+    <plugin name="cordova-plugin-splashscreen" spec="^6.0.2" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/splash.png" />
+    <preference name="AndroidWindowSplashScreenAnimationDuration" value="1000" />
+    <preference name="AndroidWindowSplashScreenAnimationType" value="fade" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#091026" />
+    <preference name="AndroidWindowSplashScreenIconBackground" value="#091026" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+
+    <!-- Ícones e Splash específicos para Android -->
+    <platform name="android">
+        <icon density="mdpi" src="res/icon.png" />
+        <icon density="hdpi" src="res/icon.png" />
+        <icon density="xhdpi" src="res/icon.png" />
+        <icon density="xxhdpi" src="res/icon.png" />
+    </platform>
+
+</widget>

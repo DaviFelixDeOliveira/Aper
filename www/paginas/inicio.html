@@ -1,0 +1,635 @@
+<div class="tela-inicio">
+    <!-- Slides -->
+    <div class="slides">
+        <div class="slide"></div>
+        <button class="inicio-botao-assistir-slide">
+            <i class="fa-solid fa-play" style="font-size: 10px;"></i>
+            Assistir
+        </button>
+    </div>
+            <!-- <div class="loader">
+        <span><span></span><span></span><span></span><span></span></span>
+        <div class="base">
+            <span></span>
+            <div class="face"></div>
+        </div>
+    </div>
+    <div class="longfazers">
+        <span></span><span></span><span></span><span></span>
+    </div> -->
+    <div class="container-sugeridos" id="container-sugeridos">
+        <div class="sugeridos">
+            <!-- Filmes Natalinos -->
+            <div class="lista" id="playlist-entao-e-natal">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Então é Natal...</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt4729430" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mlxKite1x1PgmIhJgAxNS9eHmH8.jpg');"></div>
+                        <label class="obra-nome">Klaus</label>
+                    </div>
+                    <div class="obra" data-id="tt0170016" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/sy0vo1cmpKqwPRiMUiJ45jyLsX7.jpg');"></div>
+                        <label class="obra-nome">O Grinch</label>
+                    </div>
+                    <div class="obra" data-id="tt0099785" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/tEWGRznu7QYzJiIxtIwxIpIcldE.jpg');"></div>
+                        <label class="obra-nome">Esqueceram de Mim</label>
+                    </div>
+                    <div class="obra" data-id="tt0104431" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/dGiPJO75b9GmXqxvusbKlcYrDcg.jpg');"></div>
+                        <label class="obra-nome">Esqueceram de Mim 2: Perdido em Nova York</label>
+                    </div>
+                    <div class="obra" data-id="tt0107688" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/uRTawBff9b9lGm2KSmK7j7hUsOF.jpg');"></div>
+                        <label class="obra-nome">O Estranho Mundo de Jack</label>
+                    </div>
+                    <div class="obra" data-id="tt10187208" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/odKqOY6VE6C59YAdGHB0b5Havye.jpg');"></div>
+                        <label class="obra-nome">Um Menino Chamado Natal</label>
+                    </div>
+                    <div class="obra" data-id="tt8954732" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/iHbHTn6awwTTu9kcfBe2hkTuWXS.jpg');"></div>
+                        <label class="obra-nome">A Princesa e a Plebeia</label>
+                    </div>
+                    <div class="obra" data-id="tt2990140" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/AgkpsVBnOvYbmuR8Rg71NVE17Rh.jpg');"></div>
+                        <label class="obra-nome">Crônicas de Natal</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Filmes Populares -->
+            <div class="lista" id="filmes-populares">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Filmes Populares</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt7574556" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/81T9IcPK3bF2RbJyKURa4rF4sxM.jpg');"></div>
+                        <label class="obra-nome">O Frio da Morte</label>
+                    </div>
+                    <div class="obra" data-id="tt10374610" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/s303drBPhD6574TZSPXHK8ppGvg.jpg');"></div>
+                        <label class="obra-nome">A Longa Marcha - Caminhe ou Morra</label>
+                    </div>
+                    <div class="obra" data-id="tt31973693" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/2rCj8WrP2DbEbQTFwBxRqwSg03d.jpg');"></div>
+                        <label class="obra-nome">Os Roses: Até que a Morte os Separe</label>
+                    </div>
+                    <div class="obra" data-id="tt33550069" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/w5E75gF48xNfKXmBIsbWhiINwsi.jpg');"></div>
+                        <label class="obra-nome">Good News</label>
+                    </div>
+                    <div class="obra" data-id="tt33311244" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/t6PAC48f3t6PgzX46wU0iefrd8D.jpg');"></div>
+                        <label class="obra-nome">Nossa Culpa</label>
+                    </div>
+                    <div class="obra" data-id="tt0498396" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/i4o2aPGlnsxfPmDPF5lmlgjScyv.jpg');"></div>
+                        <label class="obra-nome">Os Pestes</label>
+                    </div>
+                    <div class="obra" data-id="tt7130300" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/f8Sx0nzu1xITgVEHdutKQFU1jU8.jpg');"></div>
+                        <label class="obra-nome">A Mulher na Cabine 10</label>
+                    </div>
+                    <div class="obra" data-id="tt13650700" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/fUyz81RMH230oMuuQB5bQVhDCXW.jpg');"></div>
+                        <label class="obra-nome">A Grande Viagem da Sua Vida</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Nos Cinemas -->
+            <div class="lista" id="nos-cinemas">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Nos Cinemas</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt20969586" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d3Bg0OTEr42eOJ9oEypdeeRrMmJ.jpg');"></div>
+                        <label class="obra-nome">Thunderbolts*</label>
+                    </div>
+                    <div class="obra" data-id="tt23476986" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/k32XKMjmXMGeydykD32jfER3BVI.jpg');"></div>
+                        <label class="obra-nome">G20</label>
+                    </div>
+                    <div class="obra" data-id="tt27847051" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/nnx7q1ucLOfFrpAYvGmSEtbWf3L.jpg');"></div>
+                        <label class="obra-nome">O Agente Secreto</label>
+                    </div>
+                    <div class="obra" data-id="tt11655566" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/w600_and_h900_bestv2/ircyMQMWf2crlsIykVoBUpeo3B.jpg');"></div>
+                        <label class="obra-nome">Lilo & Stitch</label>
+                    </div>
+                    <div class="obra" data-id="tt1674782" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7Q2CmqIVJuDAESPPp76rWIiA0AD.jpg');"></div>
+                        <label class="obra-nome">Karate Kid: Lendas</label>
+                    </div>
+                    <div class="obra" data-id="tt22898462" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rMKL8ubl7pXpe9NUTIgsaFK9D6S.jpg');"></div>
+                        <label class="obra-nome">Invocação do Mal 4: O Último Ritual</label>
+                    </div>
+                    <div class="obra" data-id="tt17526714" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mZxsN0bf6Ib2xIz25dxXQRyphlw.jpg');"></div>
+                        <label class="obra-nome">A Substância</label>
+                    </div>
+                    <div class="obra" data-id="tt14205554" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/1JEP5gLuDGCs686d2Yi6DMJP9XI.jpg');"></div>
+                        <label class="obra-nome">Guerreiras do K-Pop</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Nacionais -->
+            <div class="lista" id="nacionais">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Nacionais</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0317248" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/g52pHwOgfozKB9rNh6NiuIJMUas.jpg');"></div>
+                        <label class="obra-nome">Cidade de Deus</label>
+                    </div>
+                    <div class="obra" data-id="tt0861739" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/nYdZUbNPgrphcdZ6dr9diqp2fiI.jpg');"></div>
+                        <label class="obra-nome">Tropa de Elite</label>
+                    </div>
+                    <div class="obra" data-id="tt2762506" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/AerUQBXkSjALUSwVlInKlPd0yqq.jpg');"></div>
+                        <label class="obra-nome">Bacurau</label>
+                    </div>
+                    <div class="obra" data-id="tt3742378" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9h5BsxRmxLAvASADo2VcTlTUdb0.jpg');"></div>
+                        <label class="obra-nome">Que Horas Ela Volta?</label>
+                    </div>
+                    <div class="obra" data-id="tt0140888" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/veieWEMmBDVkkpimgnJzoNDdcfL.jpg');"></div>
+                        <label class="obra-nome">Central do Brasil</label>
+                    </div>
+                    <div class="obra" data-id="tt0271383" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wBVRle1dLtJOKKAHod8YbwB87D5.jpg');"></div>
+                        <label class="obra-nome">O Auto da Compadecida</label>
+                    </div>
+                    <div class="obra" data-id="tt1092016" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/c01585ayEGyCgu3ZD8burHup44.jpg');"></div>
+                        <label class="obra-nome">Meu Nome Não é Johnny</label>
+                    </div>
+                    <div class="obra" data-id="tt0448927" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/hMvrBCSzSLZ7x79b73b3ZbGRBhL.jpg');"></div>
+                        <label class="obra-nome">Se Eu Fosse Você</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Clássicos do Cinema -->
+            <div class="lista" id="classicos">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Clássicos do Cinema</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0068646" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7nfMHfkiu8Z8JxQranJvYWwPHtS.jpg');"></div>
+                        <label class="obra-nome">O Poderoso Chefão</label>
+                    </div>
+                    <div class="obra" data-id="tt0109830" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/DpwUG9P2KQt08GVfR8jDAlZo71.jpg');"></div>
+                        <label class="obra-nome">Forrest Gump</label>
+                    </div>
+                    <div class="obra" data-id="tt0113497" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lzGTOie3M3Adb4eIAXqolDuxm3S.jpg');"></div>
+                        <label class="obra-nome">Jumanji</label>
+                    </div>
+                    <div class="obra" data-id="tt0120338" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mUQq6WcdRBAyqIbmbGjxdOycDrR.jpg');"></div>
+                        <label class="obra-nome">Titanic</label>
+                    </div>
+                    <div class="obra" data-id="tt0034583" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/tfNuePdHrP9fp6K2VTJwHKKJf8C.jpg');"></div>
+                        <label class="obra-nome">Casablanca</label>
+                    </div>
+                    <div class="obra" data-id="tt0137523" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rCMuTyJGT2GJzXcvWeYAVHQQRFS.jpg');"></div>
+                        <label class="obra-nome">Clube da Luta</label>
+                    </div>
+                    <div class="obra" data-id="tt0081505" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wBoPj01HO50WBPHb5C4AHC9TdKv.jpg');"></div>
+                        <label class="obra-nome">O Iluminado</label>
+                    </div>
+                    <div class="obra" data-id="tt0107290" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9oOLxsBalS3hQAvVt8dKRF1gMfG.jpg');"></div>
+                        <label class="obra-nome">Jurassic Park</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Superação e Coragem -->
+            <div class="lista" id="superacao">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Superação e Coragem</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0454921" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/otmFt1Olxdo1QbHk1V3v13IoIeC.jpg');"></div>
+                        <label class="obra-nome">À Procura da Felicidade</label>
+                    </div>
+                    <div class="obra" data-id="tt1809398" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/j3Wwm6zjvxUHCMkwZ8vqZPER9eC.jpg');"></div>
+                        <label class="obra-nome">Invencível</label>
+                    </div>
+                    <div class="obra" data-id="tt1542344" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/pkWTnRGILTW0wnhS4erXGDrwYZd.jpg');"></div>
+                        <label class="obra-nome">127 Horas</label>
+                    </div>
+                    <div class="obra" data-id="tt2084970" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9DoR4jZoW7wpsmxMgY6wMVehEl0.jpg');"></div>
+                        <label class="obra-nome">O Jogo da Imitação</label>
+                    </div>
+                    <div class="obra" data-id="tt7533152" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/akBmvxg9CsyMxA589iNjZwWHOJa.jpg');"></div>
+                        <label class="obra-nome">O Menino que Descobriu o Vento</label>
+                    </div>
+                    <div class="obra" data-id="tt10431500" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/tcJsL74S9WOB8dWuyyxEiJG86yX.jpg');"></div>
+                        <label class="obra-nome">Milagre na Cela 7</label>
+                    </div>
+                    <div class="obra" data-id="tt2543472" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/b7xQ5fuyVO4c24igizCfPgF6n7q.jpg');"></div>
+                        <label class="obra-nome">Extraordinário</label>
+                    </div>
+                    <div class="obra" data-id="tt1596346" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/5UJoHrXgVbsJLxP2MM1iR4fQPuK.jpg');"></div>
+                        <label class="obra-nome">Soul Surfer: Coragem de Viver</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Universo Marvel -->
+            <div class="lista" id="universo-marvel">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Universo Marvel</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0371746" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uu82iyWC38j4V4plb32Mbk16NFN.jpg');"></div>
+                        <label class="obra-nome">Homem de Ferro</label>
+                    </div>
+                    <div class="obra" data-id="tt0458339" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/boEDtWVdGTH6ahxXY4BjyKiq8xC.jpg');"></div>
+                        <label class="obra-nome">Capitão América: O Primeiro Vingador</label>
+                    </div>
+                    <div class="obra" data-id="tt0800369" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/g3v0G2IAFSoaf1VfkaS6mFQwp4X.jpg');"></div>
+                        <label class="obra-nome">Thor</label>
+                    </div>
+                    <div class="obra" data-id="tt0848228" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/m6IThPXNhSMltKvGZRet8aYNrr3.jpg');"></div>
+                        <label class="obra-nome">Os Vingadores</label>
+                    </div>
+                    <div class="obra" data-id="tt2015381" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/A6H1U9nejD24SOmDforDs4pjbev.jpg');"></div>
+                        <label class="obra-nome">Guardiões da Galáxia</label>
+                    </div>
+                    <div class="obra" data-id="tt1825683" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/vJnGmCSt9aKiSmla663xv9MSnp3.jpg');"></div>
+                        <label class="obra-nome">Pantera Negra</label>
+                    </div>
+                    <div class="obra" data-id="tt4154756" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/566hWfsfyR9zQF0nY3oBUtghfKb.jpg');"></div>
+                        <label class="obra-nome">Vingadores: Guerra Infinita</label>
+                    </div>
+                    <div class="obra" data-id="tt9419884" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/dvI62PBuiYI4d0IaRfw8a0Hi05x.jpg');"></div>
+                        <label class="obra-nome">Doutor Estranho no Multiverso da Loucura</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Viagem no Tempo -->
+            <div class="lista" id="viagem-no-tempo">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Viagem no Tempo</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0088247" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uxFodTcKu1araYhpzWTDEcBlvxH.jpg');"></div>
+                        <label class="obra-nome">O Exterminador do Futuro</label>
+                    </div>
+                    <div class="obra" data-id="tt0816692" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/fZsr8GvYwC7Qamaw7NMHO9ZXfB0.jpg');"></div>
+                        <label class="obra-nome">Interestelar</label>
+                    </div>
+                    <div class="obra" data-id="tt1276104" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/daVMmVg8ezEPDrR3BXnlhdVownF.jpg');"></div>
+                        <label class="obra-nome">Looper</label>
+                    </div>
+                    <div class="obra" data-id="tt2027178" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/j617XPP3HVTViGdK0jhvzvh2XE1.jpg');"></div>
+                        <label class="obra-nome">O Homem do Futuro</label>
+                    </div>
+                    <div class="obra" data-id="tt0107048" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/mCnrZKuj7emHgzUyTQQopZhGkvj.jpg');"></div>
+                        <label class="obra-nome">Feitiço do Tempo</label>
+                    </div>
+                    <div class="obra" data-id="tt1605783" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/o3wddBGh0ONY3wqDNKSvqTBSkly.jpg');"></div>
+                        <label class="obra-nome">Meia-Noite em Paris</label>
+                    </div>
+                    <div class="obra" data-id="tt2436386" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/odJyfLpE22RLNs9vvTB023yfxk8.jpg');"></div>
+                        <label class="obra-nome">Projeto Almanaque</label>
+                    </div>
+                    <div class="obra" data-id="tt0289879" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lBF5UPapR8yDimjxggdYOFSxCrP.jpg');"></div>
+                        <label class="obra-nome">Efeito Borboleta</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Filmes Bíblicos -->
+            <div class="lista" id="biblicos">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Filmes Bíblicos</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0335345" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d240UBMaCEXwJwjz7WgrVGrZQEQ.jpg');"></div>
+                        <label class="obra-nome">A Paixão de Cristo</label>
+                    </div>
+                    <div class="obra" data-id="tt5431016" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/rTvxSFiT4wFuzkwcC59ljWnmeVI.jpg');"></div>
+                        <label class="obra-nome">Os Dez Mandamentos</label>
+                    </div>
+                    <div class="obra" data-id="tt3210686" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/zBFDv6OUvMfwqzzmzMMolLcSRnu.jpg');"></div>
+                        <label class="obra-nome">O Filho de Deus</label>
+                    </div>
+                    <div class="obra" data-id="tt0089420" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w500_and_h282_face/oIX9RraqTaqfyFQkrsbVt1oN3mn.jpg');"></div>
+                        <label class="obra-nome">Rei Davi</label>
+                    </div>
+                    <div class="obra" data-id="tt0120794" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/original/or5ISKhlkMCds9rDlEko52YRtBs.jpg');"></div>
+                        <label class="obra-nome">O Príncipe do Egito</label>
+                    </div>
+                    <div class="obra" data-id="tt1959490" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/92Lg5uqQL6hiqioYB3UFqHzo2hk.jpg');"></div>
+                        <label class="obra-nome">Noé</label>
+                    </div>
+                    <div class="obra" data-id="tt1528100" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/zR14k5yOquUS2f9SBaEsXYiJuLZ.jpg');"></div>
+                        <label class="obra-nome">Êxodo: Deuses e Reis</label>
+                    </div>
+                    <div class="obra" data-id="tt0264734" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/n88p2RDLHfaa3qfOAiWVR5ANeY8.jpg');"></div>
+                        <label class="obra-nome">José: O Rei dos Sonhos</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Filmes de Anime -->
+            <div class="lista" id="anime">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Filmes de Anime</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt5311514" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/qg0P94wHVrrozZkxfcXx0w5fHl.jpg');"></div>
+                        <label class="obra-nome">Your Name</label>
+                    </div>
+                    <div class="obra" data-id="tt0245429" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/ukfI9QkU1aIhOhKXYWE9n3z1mFR.jpg');"></div>
+                        <label class="obra-nome">A Viagem de Chihiro</label>
+                    </div>
+                    <div class="obra" data-id="tt0097814" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/aC4oNwvmdFaB1MX60Ww0Vc79cgd.jpg');"></div>
+                        <label class="obra-nome">O Serviço de Entregas da Kiki</label>
+                    </div>
+                    <div class="obra" data-id="tt9426210" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/71MtpBSywWmHeSG7nUWUeBNPOMv.jpg');"></div>
+                        <label class="obra-nome">O Tempo com Você</label>
+                    </div>
+                    <div class="obra" data-id="tt7961060" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gzZ5FPUlD0BoX6L60EkrznZ3lw0.jpg');"></div>
+                        <label class="obra-nome">Dragon Ball Super: Broly</label>
+                    </div>
+                    <div class="obra" data-id="tt16183464" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gVEt8DGjq0V2cH7tqYRb90iuhdj.jpg');"></div>
+                        <label class="obra-nome">One Piece Film: Red</label>
+                    </div>
+                    <div class="obra" data-id="tt0096283" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/as8kPzYUf2L2da7k8SXgAsHun2J.jpg');"></div>
+                        <label class="obra-nome">Meu Amigo Totoro</label>
+                    </div>
+                    <div class="obra" data-id="tt16428256" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lrACtADbyOCEK2K3gU7ZL5LYXR6.jpg');"></div>
+                        <label class="obra-nome">Suzume</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Para não assistir sozinho (Terror) === -->
+            <div class="lista" id="terror">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Para não assistir sozinho</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0185937" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/2Goxfvu5hKqOC1R84A9S0QVPzoa.jpg');"></div>
+                        <label class="obra-nome">A Bruxa de Blair</label>
+                    </div>
+                    <div class="obra" data-id="tt4361050" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://upload.wikimedia.org/wikipedia/pt/4/43/Supernatural-Temporada7_%28Blu-ray%29.jpg');"></div>
+                        <label class="obra-nome">Ouija: Origem do Mal</label>
+                    </div>
+                    <div class="obra" data-id="tt1396484" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rBcFsAO021aCbXCr2qPG5xchxyG.jpg');"></div>
+                        <label class="obra-nome">It: A Coisa</label>
+                    </div>
+                    <div class="obra" data-id="tt5052448" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/224vr5QIvVHSBlhUjJ8giPsU5eq.jpg');"></div>
+                        <label class="obra-nome">Corra!</label>
+                    </div>
+                    <div class="obra" data-id="tt1922777" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/4dfGwafmVjMBpKaO0LHOSrGkAHZ.jpg');"></div>
+                        <label class="obra-nome">A Entidade</label>
+                    </div>
+                    <div class="obra" data-id="tt2339741" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/9VOmHfWzr8K2rvkTvyyeQghvQPp.jpg');"></div>
+                        <label class="obra-nome">A Mulher de Preto 2</label>
+                    </div>
+                    <div class="obra" data-id="1622" data-tipo="tv">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/3vuqPp5GVIkmwK7x57CjftExILn.jpg');"></div>
+                        <label class="obra-nome">Sobrenatural</label>
+                    </div>
+                    <div class="obra" data-id="tt0263488" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/rQCvBeiBaxCMVbMLb1LvuCdmFcH.jpg');"></div>
+                        <label class="obra-nome">Olhos Famintos</label>
+                    </div>
+                </div>
+            </div>
+            <!-- O melhor da comédia === -->
+            <div class="lista" id="comedia">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">O melhor da comédia</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0123964" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/2DvZkRhcPZ4Y93aWMeCTKkZpYfG.jpg');"></div>
+                        <label class="obra-nome">Até Que a Fuga os Separe</label>
+                    </div>
+                    <div class="obra" data-id="tt1375670" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7QS44dUzPM3q0VU1i46fIGPuHm4.jpg');"></div>
+                        <label class="obra-nome">Gente Grande</label>
+                    </div>
+                    <div class="obra" data-id="tt2191701" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/hqsdgtJ4gcqzVZ0GMRPCCBact6x.jpg');"></div>
+                        <label class="obra-nome">Gente Grande 2</label>
+                    </div>
+                    <div class="obra" data-id="tt1564367" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wiulG2iGTR7WCvtXuJeMksKVKxK.jpg');"></div>
+                        <label class="obra-nome">Esposa de Mentirinha</label>
+                    </div>
+                    <div class="obra" data-id="tt0343660" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/vMBnvoSU9niESG3tWBK4miM004V.jpg');"></div>
+                        <label class="obra-nome">Como se Fosse a Primeira Vez</label>
+                    </div>
+                    <div class="obra" data-id="tt0381707" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d50Wp6N07rggjT88T5Oh72AgV5O.jpg');"></div>
+                        <label class="obra-nome">As Branquelas</label>
+                    </div>
+                    <div class="obra" data-id="tt0208003" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/jq2rlFctheDnJzr4LCDJWZLFL8F.jpg');"></div>
+                        <label class="obra-nome">Vovó... Zona</label>
+                    </div>
+                    <div class="obra" data-id="tt7882104" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/6EL5fYSiFslUhPkYTsBvAccXWAQ.jpg');"></div>
+                        <label class="obra-nome">Os Farofeiros</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Caiu um cisco no meu olho... (emocionais) === -->
+            <div class="lista" id="emocionais">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Caiu um cisco no meu olho...</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt2872518" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/xFCLFzlAR8yCr6ytugMuv6K16b7.jpg');"></div>
+                        <label class="obra-nome">A Cabana</label>
+                    </div>
+                    <div class="obra" data-id="tt0118799" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/6aNKD81RHR1DqUUa8kOZ1TBY1Lp.jpg');"></div>
+                        <label class="obra-nome">A Vida é Bela</label>
+                    </div>
+                    <div class="obra" data-id="tt0398808" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/eezB4LwCNCUkdihvtcXThzdCxlg.jpg');"></div>
+                        <label class="obra-nome">Ponte Para Terabítia</label>
+                    </div>
+                    <div class="obra" data-id="tt2582846" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/ySxySKrPs3iAVuvrVI5yizhiNTX.jpg');"></div>
+                        <label class="obra-nome">A Culpa é das Estrelas</label>
+                    </div>
+                    <div class="obra" data-id="tt2543472" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/b7xQ5fuyVO4c24igizCfPgF6n7q.jpg');"></div>
+                        <label class="obra-nome">Extraordinário</label>
+                    </div>
+                    <div class="obra" data-id="tt1753383" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/7ORgLZ7dIIi5bAwGvkVjOepks5U.jpg');"></div>
+                        <label class="obra-nome">Quatro Vidas de um Cachorro</label>
+                    </div>
+                    <div class="obra" data-id="tt6472976" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/d7wa3VpUpKDQ7GG9EMw8zSJCFoI.jpg');"></div>
+                        <label class="obra-nome">A Cinco Passos de Você</label>
+                    </div>
+                    <div class="obra" data-id="tt2674426" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/8xwSi46ML4lcO0byyThhl3NVQ4Y.jpg');"></div>
+                        <label class="obra-nome">Como eu Era Antes de Você</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Momento em família === -->
+            <div class="lista" id="familia">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Momento em família</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt2283362" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/4wOIPzzeiuPcCFb0sGTmUQecyrF.jpg');"></div>
+                        <label class="obra-nome">Jumanji: Bem-vindo à Selva</label>
+                    </div>
+                    <div class="obra" data-id="tt9848626" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/uxn7MiSTlZdCuF8WyCXRW9DN8kr.jpg');"></div>
+                        <label class="obra-nome">Hotel Transilvânia: Transformonstrão</label>
+                    </div>
+                    <div class="obra" data-id="tt22022452" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/lSRlQnNSOc96UpCidOHbvQl0WKW.jpg');"></div>
+                        <label class="obra-nome">Divertida Mente 2</label>
+                    </div>
+                    <div class="obra" data-id="tt0903624" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/gbx523WxsFLdLmcUjzOFGezwcGs.jpg');"></div>
+                        <label class="obra-nome">O Hobbit</label>
+                    </div>
+                    <div class="obra" data-id="tt0477347" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/zun7wiyuxrLrrsZQkoGc767QG8Q.jpg');"></div>
+                        <label class="obra-nome">Uma Noite no Museu</label>
+                    </div>
+                    <div class="obra" data-id="tt0337563" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/j1ZEORZZ02wFTmmZbmcwivU6jJd.jpg');"></div>
+                        <label class="obra-nome">De Repente 30</label>
+                    </div>
+                    <div class="obra" data-id="tt8041270" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/p0nDlV6hdtqEabq69rnZe6q1INs.jpg');"></div>
+                        <label class="obra-nome">Jurassic World: Domínio</label>
+                    </div>
+                    <div class="obra" data-id="tt3470600" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wf9C6iqY9tXG7TrQDg3E4Flgap7.jpg');"></div>
+                        <label class="obra-nome">Sing: Quem Canta Seus Males Espanta</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Além da realidade (Ficção Científica) === -->
+            <div class="lista" id="ficcao">
+                <div class="lista-cabecalho">
+                    <label class="lista-titulo">Além da realidade</label>
+                    <label class="lista-ver">Ver mais</label>
+                </div>
+                <div class="lista-obras">
+                    <div class="obra" data-id="tt0418279" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/77P56ZcL8M9Cw7FIptMIGjhNJoj.jpg');"></div>
+                        <label class="obra-nome">Transformers</label>
+                    </div>
+                    <div class="obra" data-id="tt0241527" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/4TaB2QPBaaK5JItEcNDpD8ySNNo.jpg');"></div>
+                        <label class="obra-nome">Harry Potter e a Pedra Filosofal</label>
+                    </div>
+                    <div class="obra" data-id="tt1324999" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wXkGJ2gUvyO1hP26kZ3mtSPaxvK.jpg');"></div>
+                        <label class="obra-nome">A Saga Crepúsculo: Amanhecer - Parte 1</label>
+                    </div>
+                    <div class="obra" data-id="tt2488496" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/j0PvehDTsGPgptVTKhSA9WAMNfL.jpg');"></div>
+                        <label class="obra-nome">Star Wars 7: O Despertar da Força</label>
+                    </div>
+                    <div class="obra" data-id="tt0133093" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/bEVjkVlOGlXwD02Q3ybnAvDNxPV.jpg');"></div>
+                        <label class="obra-nome">Matrix</label>
+                    </div>
+                    <div class="obra" data-id="tt0499549 data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/wBdR7j3ZZu5z5pYyN4l8ASBZNr0.jpg');"></div>
+                        <label class="obra-nome">Avatar</label>
+                    </div>
+                    <div class="obra" data-id="tt0088763" data-tipo="movie">
+                        <div class="obra-capa" style="background-image:url('https://media.themoviedb.org/t/p/w1000_and_h563_face/nBBGWyGUacqaRKDSk28w4mEiamW.jpg');"></div>
+                        <label class="obra-nome">De Volta Para o Futuro</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

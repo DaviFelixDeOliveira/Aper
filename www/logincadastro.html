@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/just-validate@3.5.1/dist/css/justValidateTooltip.min.css">
+        <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="tela-preacesso">
+            <div class="preacesso-itens">
+                <div class="loader">
+                    <span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <div class="base">
+                        <span></span>
+                        <div class="face"></div>
+                    </div>
+                </div>
+                <div class="longfazers">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <label class="preacesso-frase-impacto">
+                    Decole no
+                    <span class="galaxy-text">universo</span>
+                    do
+                entretenimento
+                </label>
+                <div class="preacesso-botoes">
+                    <button id="google-login" class="preacesso-botao-google">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="18">
+                        Entrar com Google
+                    </button>
+                    <button class="preacesso-botao-cadastro-manual" id="preacesso-botao-cadastrar">Cadastrar</button>
+                    <button class="preacesso-botao-entrar-manual" id="preacesso-botao-entrar">Entrar</button>
+                </div>
+                <label class="preacesso-aviso-termos">
+                    Ao criar uma conta, você concorda com os nossos
+                    <b>
+                        Termos de
+                    Serviço
+                    </b>
+                    e
+                    <b>Política de Privacidade.</b>
+                </label>
+            </div>
+            <form class="preacesso-form-itens" id="login-itens">
+                <button class="preacesso-botao-voltar" id="login-botao-voltar"></button>
+                <div class="preacesso-cabecalho">
+                    <label class="preacesso-titulo">Entrar</label>
+                    <label class="preacesso-subtitulo">
+                        Insira suas credenciais e se conecte de volta com o universo do
+                    cinema.
+                    </label>
+                </div>
+                <div class="preacesso-campos">
+                    <div class="preacesso-campo">
+                        <label for="login-email">E-mail</label>
+                        <input
+                            class="preacesso-input-campo"
+                            type="email"
+                            name="login-email"
+                            id="login-email"
+                            required
+                            tabindex="1"
+                        >
+                    </div>
+                    <div class="preacesso-campo">
+                        <label for="login-senha">Senha</label>
+                        <input
+                            class="preacesso-input-campo"
+                            type="password"
+                            name="login-senha"
+                            id="login-senha"
+                            required
+                            tabindex="2"
+                        >
+                    </div>
+                    <div class="preacesso-rodape">
+                        <div class="preacesso-checkbox-item">
+                            <input
+                                class="preacesso-checkbox-campo"
+                                type="checkbox"
+                                name="login-lembrar"
+                                id="login-lembrar"
+                            >
+                            <label for="login-lembrar">Lembrar</label>
+                        </div>
+                        <div class="preacesso-esquecisenha">
+                            <label class="preacesso-titulo-esquecisenha">Esqueceu sua senha?</label>
+                        </div>
+                    </div>
+                </div>
+                <button class="preacesso-botao-submit" id="login-submit">Entrar</button>
+                <div class="preacesso-erro" id="login-erro">Email ou senha inválidos</div>
+            </form>
+            <form class="preacesso-form-itens" id="cadastro-itens">
+                <button class="preacesso-botao-voltar" id="cadastro-botao-voltar"></button>
+                <div class="preacesso-cabecalho">
+                    <label class="preacesso-titulo">Criar conta</label>
+                    <label class="preacesso-subtitulo">Um passo de entrar no universo do entretenimento.</label>
+                </div>
+                <div class="preacesso-campos">
+                    <div class="preacesso-campo">
+                        <label for="cadastro-nome">Nome</label>
+                        <input
+                            class="preacesso-input-campo"
+                            type="nome"
+                            name="cadastro-nome"
+                            id="cadastro-nome"
+                            required
+                            tabindex="1"
+                        >
+                    </div>
+                    <div class="preacesso-campo">
+                        <label for="cadastro-email">E-mail</label>
+                        <input
+                            class="preacesso-input-campo"
+                            type="email"
+                            name="cadastro-email"
+                            id="cadastro-email"
+                            required
+                            tabindex="2"
+                        >
+                    </div>
+                    <div class="preacesso-campo">
+                        <label for="cadastro-senha">Senha</label>
+                        <input
+                            class="preacesso-input-campo"
+                            type="password"
+                            name="cadastro-senha"
+                            id="cadastro-senha"
+                            required
+                            tabindex="3"
+                        >
+                    </div>
+                    <div class="preacesso-rodape">
+                        <div class="preacesso-checkbox-item">
+                            <input
+                                class="preacesso-checkbox-campo"
+                                type="checkbox"
+                                name="cadastro-acordo"
+                                id="cadastro-acordo"
+                            >
+                            <label for="cadastro-acordo">
+                                Eu estou de acordo com os
+                                <b style="text-decoration: underline;">Termos de Serviço</b>
+                                .
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button class="preacesso-botao-submit" id="cadastro-submit">Criar conta</button>
+                <div class="preacesso-erro" id="cadastro-erro">Preencha os campos!</div>
+            </form>
+        </div>
+        <!-- No final do body -->
+        <script src="cordova.js"></script>
+        <script src="components/conexao.js"></script>
+        <script src="components/authgoogle.js"></script>
+        <script src="components/logincadastro.js"></script>
+    </body>
+</html>
