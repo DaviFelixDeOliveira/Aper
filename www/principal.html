@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="components/supabase.min.js"></script>
     </head>
     <body>
         <div class="popup-overlay" id="popup-overlay"></div>
@@ -37,198 +37,389 @@
         <script src="components/bloqueio-externo.js"></script>
         <script src="components/funcoes.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", async () => {
-                let usuarioLocal = localStorage.getItem("usuario_id");
+      //HISTÓRICO DE NAVEGAÇÃO
+      let historySPA = JSON.parse(sessionStorage.getItem("historySPA") || "[]");
+      let paginaCarregada = false;
 
-                // 🔥 VERIFICA se supabase existe
-                if (typeof window.supabase === 'undefined') {
-                    console.error('❌ Supabase não carregado!');
-                    // Espera um pouco e tenta novamente
-                    setTimeout(() => {
-                        if (typeof window.supabase !== 'undefined') {
-                            carregarPaginaInicial();
-                        } else {
-                            console.error('❌ Supabase ainda não carregado após timeout');
-                        }
-                    }, 1000);
-                    return;
-                }
+      // DEFINE carregarPagina GLOBALMENTE ANTES DE QUALQUER USO
+      window.carregarPagina = function (url, callback) {
+        // MARCA QUE UMA PÁGINA FOI CARREGADA
+        paginaCarregada = true;
 
-                const { data: sessionData } = await window.supabase.auth.getSession();
-                const sessaoSupabase = sessionData?.session;
+        console.log("carregarPagina chamado para:", url);
+        const conteudo = document.getElementById("conteudo");
 
-                if (!usuarioLocal && !sessaoSupabase) {
-                    window.location.href = "logincadastro.html";
-                    return;
-                }
+        let historySPA = JSON.parse(
+          sessionStorage.getItem("historySPA") || "[]"
+        );
+        const ultimaPagina = historySPA[historySPA.length - 1];
 
-                if (sessaoSupabase) {
-                    const user = sessaoSupabase.user;
-                    localStorage.setItem("usuario_id", user.id);
-                    localStorage.setItem("usuario_nome", user.user_metadata.full_name || "Usuário");
-                    localStorage.setItem("usuario_email", user.email);
-                    localStorage.setItem("usuario_foto", user.user_metadata.avatar_url || "");
-                    localStorage.setItem("usuario_google", "true");
-                }
+        // CORREÇÃO: SÓ CONSIDERA "JÁ CARREGADA" SE HOUVER CONTEÚDO VISÍVEL
+        const temConteudoVisivel = conteudo.querySelector(".slide-in") !== null;
 
-                // 🔥 CARREGA A PÁGINA INICIAL APÓS LOGIN
-                carregarPaginaInicial();
-            });
-
-            function carregarPaginaInicial() {
-                console.log('🚀 Carregando página inicial...');
-                if (typeof window.carregarPagina === 'function') {
-                    window.carregarPagina("paginas/inicio.html", function () {
-                        console.log('✅ Página inicial carregada, chamando initInicio...');
-                        if (typeof initInicio === "function") {
-                            initInicio();
-                        } else {
-                            console.error('❌ initInicio não encontrado');
-                        }
-                    });
-                } else {
-                    console.error('❌ carregarPagina não está disponível');
-                }
+        if (ultimaPagina === url && temConteudoVisivel) {
+          console.log("Página já carregada e visível:", url);
+          if (callback) {
+            const containerExistente = conteudo.querySelector(
+              ".slide-in:last-child"
+            );
+            if (containerExistente) {
+              console.log("Re-executando callback para página existente");
+              callback(containerExistente);
+            } else {
+              console.log("Executando callback sem container");
+              callback();
             }
+          }
+          return;
+        }
 
-            $(document).ready(function () {
-                const conteudo = $("#conteudo");
-                const navItems = $(".nav-item");
+        // SE CHEGOU AQUI, PRECISA CARREGAR A PÁGINA
+        console.log("Carregando página:", url);
 
-                window.carregarPagina = function (url, callback) {
-                    console.log('📄 carregarPagina chamado para:', url);
-                    const conteudo = document.getElementById("conteudo");
+        fetch(url)
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`Erro HTTP: ${res.status}`);
+            }
+            return res.text();
+          })
+          .then((html) => {
+            const slideContainer = document.createElement("div");
+            slideContainer.classList.add("slide-in");
+            slideContainer.innerHTML = html;
 
-                    let historySPA = JSON.parse(sessionStorage.getItem("historySPA") || "[]");
-                    const ultimaPagina = historySPA[historySPA.length - 1];
+            conteudo.appendChild(slideContainer);
 
-                    if (ultimaPagina === url) {
-                        console.log('📄 Página já carregada:', url);
-                        if (callback) {
-                            const containerExistente = conteudo.querySelector(".slide-in:last-child");
-                            if (containerExistente) {
-                                callback(containerExistente);
-                            }
-                        }
-                        return;
-                    }
+            //ATUALIZA HISTÓRICO
+            historySPA.push(url);
+            sessionStorage.setItem("historySPA", JSON.stringify(historySPA));
 
-                    fetch(url)
-                        .then((res) => {
-                            if (!res.ok) {
-                                throw new Error(`Erro HTTP: ${res.status}`);
-                            }
-                            return res.text();
-                        })
-                        .then((html) => {
-                            const slideContainer = document.createElement("div");
-                            slideContainer.classList.add("slide-in");
-                            slideContainer.innerHTML = html;
+            //ATUALIZA NAVBAR
+            atualizarNavbar(url);
 
-                            conteudo.appendChild(slideContainer);
+            setTimeout(() => {
+              conteudo
+                .querySelectorAll(".slide-in:not(:last-child)")
+                .forEach((el) => el.remove());
+              if (callback) {
+                callback(slideContainer);
+              }
+            }, 400);
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar página:", error);
+          });
+      };
 
-                            historySPA.push(url);
-                            sessionStorage.setItem("historySPA", JSON.stringify(historySPA));
+      //FUNÇÃO PARA ATUALIZAR NAVBAR COM BASE NA PÁGINA
+      function atualizarNavbar(pagina) {
+        const navItems = document.querySelectorAll(".nav-item");
+        navItems.forEach((item) => item.classList.remove("ni-ativo"));
 
-                            setTimeout(() => {
-                                conteudo.querySelectorAll(".slide-in:not(:last-child)").forEach((el) => el.remove());
-                                if (callback) {
-                                    callback(slideContainer);
-                                }
-                            }, 400);
-                        })
-                        .catch((error) => {
-                            console.error('❌ Erro ao carregar página:', error);
-                        });
-                };
+        if (pagina.includes("inicio.html")) {
+          document.getElementById("navbar-inicio").classList.add("ni-ativo");
+        } else if (pagina.includes("pesquisa.html")) {
+          document.getElementById("navbar-pesquisa").classList.add("ni-ativo");
+        } else if (pagina.includes("jogos.html")) {
+          document.getElementById("navbar-jogo").classList.add("ni-ativo");
+        } else if (pagina.includes("perfil.html")) {
+          document.getElementById("navbar-perfil").classList.add("ni-ativo");
+        }
+        console.log("Navbar atualizada para:", pagina);
+      }
 
-                window.voltarPagina = function () {
-                    let historySPA = JSON.parse(sessionStorage.getItem("historySPA") || "[]");
+      //FUNÇÃO PARA MOSTRAR POPUP DE CONFIRMAÇÃO
+      function mostrarPopupConfirmacao(
+        mensagem,
+        callbackConfirmar,
+        callbackCancelar
+      ) {
+        const popupOverlay = document.getElementById("popup-overlay");
+        const popupConfirmacao = document.querySelector(".popup-confirmacao");
+        const popupTitulo = document.getElementById("popup-titulo-confirmacao");
+        const btnConfirmar = document.getElementById(
+          "popup-confirmacao-confirmar"
+        );
+        const btnCancelar = document.getElementById(
+          "popup-confirmacao-cancelar"
+        );
 
-                    if (historySPA.length <= 1) {
-                        carregarPagina("paginas/inicio.html", function () {
-                            if (typeof initInicio === "function") initInicio();
-                        });
-                        return;
-                    }
+        popupTitulo.textContent = mensagem;
 
-                    historySPA.pop();
-                    const paginaAnterior = historySPA[historySPA.length - 1];
-                    sessionStorage.setItem("historySPA", JSON.stringify(historySPA));
+        //Mostra o popup
+        popupOverlay.style.display = "flex";
+        popupConfirmacao.style.display = "flex";
+        popupConfirmacao.style.opacity = "1";
 
-                    const navbar = document.getElementById("navbar");
-                    if (navbar) navbar.classList.remove("navbar-esconde");
+        //Remove eventos anteriores
+        btnConfirmar.replaceWith(btnConfirmar.cloneNode(true));
+        btnCancelar.replaceWith(btnCancelar.cloneNode(true));
 
-                    fetch(paginaAnterior)
-                        .then((res) => res.text())
-                        .then((html) => {
-                            const conteudo = document.getElementById("conteudo");
-                            const slideContainer = document.createElement("div");
-                            slideContainer.classList.add("slide-in");
-                            slideContainer.innerHTML = html;
+        //Get new references after clone
+        const newBtnConfirmar = document.getElementById(
+          "popup-confirmacao-confirmar"
+        );
+        const newBtnCancelar = document.getElementById(
+          "popup-confirmacao-cancelar"
+        );
 
-                            conteudo.appendChild(slideContainer);
+        //Configura novos eventos
+        newBtnConfirmar.onclick = function () {
+          esconderPopupConfirmacao();
+          if (callbackConfirmar) callbackConfirmar();
+        };
 
-                            setTimeout(() => {
-                                conteudo.querySelectorAll(".slide-in:not(:last-child)").forEach((el) => el.remove());
+        newBtnCancelar.onclick = function () {
+          esconderPopupConfirmacao();
+          if (callbackCancelar) callbackCancelar();
+        };
+      }
 
-                                if (paginaAnterior.includes("inicio.html") && typeof initInicio === "function") {
-                                    initInicio();
-                                } else if (paginaAnterior.includes("pesquisa.html") && typeof initPesquisa === "function") {
-                                    initPesquisa();
-                                } else if (paginaAnterior.includes("assistir.html") && typeof initAssistir === "function") {
-                                    const ultimaObra = sessionStorage.getItem("ultimaObra");
-                                    if (ultimaObra) {
-                                        const { id, tipo } = JSON.parse(ultimaObra);
-                                        initAssistir(id, tipo);
-                                    } else {
-                                        initAssistir();
-                                    }
-                                } else if (paginaAnterior.includes("perfil.html") && typeof initPerfil === "function") {
-                                    initPerfil();
-                                } else if (paginaAnterior.includes("listagem.html") && typeof initListagem === "function") {
-                                    initListagem();
-                                }
-                            }, 400);
-                        });
-                };
+      //FUNÇÃO PARA ESCONDER POPUP
+      function esconderPopupConfirmacao() {
+        const popupOverlay = document.getElementById("popup-overlay");
+        const popupConfirmacao = document.querySelector(".popup-confirmacao");
 
-                // 🔥 REMOVI a chamada duplicada do carregarPagina aqui
+        popupOverlay.style.display = "none";
+        popupConfirmacao.style.display = "none";
+        popupConfirmacao.style.opacity = "0";
+      }
 
-                navItems.on("click", function () {
-                    const id = $(this).attr("id");
+      //FUNÇÃO PARA CONFIGURAR BOTÃO VOLTAR
+      function configurarBotaoVoltar() {
+        document.addEventListener(
+          "deviceready",
+          function () {
+            document.addEventListener(
+              "backbutton",
+              function (e) {
+                e.preventDefault();
+                console.log("Botão voltar pressionado");
+                window.voltarPagina();
+              },
+              false
+            );
+          },
+          false
+        );
+      }
 
-                    navItems.removeClass("ni-ativo");
-                    $(this).addClass("ni-ativo");
+      //FUNÇÃO PARA CARREGAR PÁGINA INICIAL AUTOMATICAMENTE
+      function carregarPaginaInicialAutomaticamente() {
+        if (!paginaCarregada) {
+          console.log(
+            "Nenhuma página carregada após 2 segundos. Carregando página inicial automaticamente..."
+          );
+          carregarPaginaInicial();
+        }
+      }
 
-                    if (id !== "navbar-pesquisa") {
-                        sessionStorage.removeItem("ultimaPesquisa");
-                    }
+      document.addEventListener("DOMContentLoaded", async () => {
+        let usuarioLocal = localStorage.getItem("usuario_id");
 
-                    switch (id) {
-                        case "navbar-inicio":
-                            carregarPagina("paginas/inicio.html", function () {
-                                if (typeof initInicio === "function") initInicio();
-                            });
-                            break;
-                        case "navbar-pesquisa":
-                            carregarPagina("paginas/pesquisa.html", function () {
-                                if (typeof initPesquisa === "function") initPesquisa();
-                            });
-                            break;
-                        case "navbar-jogo":
-                            carregarPagina("paginas/jogos.html", function () {
-                                if (typeof initJogo === "function") initJogo();
-                            });
-                            break;
-                        case "navbar-perfil":
-                            carregarPagina("paginas/perfil.html", function () {
-                                if (typeof initPerfil === "function") initPerfil();
-                            });
-                            break;
-                    }
-                });
+        //INICIA TIMEOUT PARA CARREGAMENTO AUTOMÁTICO
+        setTimeout(carregarPaginaInicialAutomaticamente, 2000);
+
+        //VERIFICA se supabase existe
+        if (typeof window.supabase === "undefined") {
+          console.error("Supabase não carregado!");
+          setTimeout(() => {
+            if (typeof window.supabase !== "undefined") {
+              carregarPaginaInicial();
+            } else {
+              console.error("Supabase ainda não carregado após timeout");
+            }
+          }, 1000);
+          return;
+        }
+
+        const { data: sessionData } = await window.supabase.auth.getSession();
+        const sessaoSupabase = sessionData?.session;
+
+        if (!usuarioLocal && !sessaoSupabase) {
+          window.location.href = "logincadastro.html";
+          return;
+        }
+
+        // VERSÃO SIMPLIFICADA
+        if (sessaoSupabase) {
+          const user = sessaoSupabase.user;
+          const { data: profileData } = await supabase
+            .from("profiles")
+            .select("name")
+            .eq("id", user.id)
+            .single();
+
+          localStorage.setItem("usuario_id", user.id);
+          localStorage.setItem(
+            "usuario_nome",
+            profileData?.name || user.user_metadata.nome || "Usuário"
+          );
+          localStorage.setItem("usuario_email", user.email);
+          localStorage.setItem(
+            "usuario_foto",
+            user.user_metadata.avatar_url || ""
+          );
+        }
+
+        //INICIALIZA HISTÓRICO SE ESTIVER VAZIO
+        if (historySPA.length === 0) {
+          historySPA.push("paginas/inicio.html");
+          sessionStorage.setItem("historySPA", JSON.stringify(historySPA));
+          atualizarNavbar("paginas/inicio.html");
+        }
+
+        //CARREGA A PÁGINA INICIAL APÓS LOGIN
+        carregarPaginaInicial();
+
+        //CONFIGURA BOTÃO VOLTA DO ANDROID
+        configurarBotaoVoltar();
+      });
+
+      function carregarPaginaInicial() {
+        console.log("Carregando página inicial...");
+        if (typeof window.carregarPagina === "function") {
+          paginaCarregada = true;
+          window.carregarPagina("paginas/inicio.html", function () {
+            console.log("Página inicial carregada, chamando initInicio...");
+            if (typeof initInicio === "function") {
+              initInicio();
+            } else {
+              console.error("initInicio não encontrado");
+            }
+          });
+        } else {
+          console.error("carregarPagina não está disponível");
+        }
+      }
+
+      $(document).ready(function () {
+        const conteudo = $("#conteudo");
+        const navItems = $(".nav-item");
+
+        window.voltarPagina = function () {
+          let historySPA = JSON.parse(
+            sessionStorage.getItem("historySPA") || "[]"
+          );
+          console.log("Voltando página. Histórico:", historySPA);
+
+          if (historySPA.length <= 1) {
+            mostrarPopupConfirmacao(
+              "Deseja sair do aplicativo?",
+              function () {
+                if (navigator.app) {
+                  navigator.app.exitApp();
+                }
+              },
+              function () {
+                console.log("Saída do app cancelada");
+              }
+            );
+            return;
+          }
+
+          historySPA.pop();
+          const paginaAnterior = historySPA[historySPA.length - 1];
+          sessionStorage.setItem("historySPA", JSON.stringify(historySPA));
+
+          atualizarNavbar(paginaAnterior);
+
+          const navbar = document.getElementById("navbar");
+          if (navbar) navbar.classList.remove("navbar-esconde");
+
+          fetch(paginaAnterior)
+            .then((res) => res.text())
+            .then((html) => {
+              const conteudo = document.getElementById("conteudo");
+              const slideContainer = document.createElement("div");
+              slideContainer.classList.add("slide-in");
+              slideContainer.innerHTML = html;
+
+              conteudo.appendChild(slideContainer);
+
+              setTimeout(() => {
+                conteudo
+                  .querySelectorAll(".slide-in:not(:last-child)")
+                  .forEach((el) => el.remove());
+
+                if (
+                  paginaAnterior.includes("inicio.html") &&
+                  typeof initInicio === "function"
+                ) {
+                  initInicio();
+                } else if (
+                  paginaAnterior.includes("pesquisa.html") &&
+                  typeof initPesquisa === "function"
+                ) {
+                  initPesquisa();
+                } else if (
+                  paginaAnterior.includes("assistir.html") &&
+                  typeof initAssistir === "function"
+                ) {
+                  const ultimaObra = sessionStorage.getItem("ultimaObra");
+                  if (ultimaObra) {
+                    const { id, tipo } = JSON.parse(ultimaObra);
+                    initAssistir(id, tipo);
+                  } else {
+                    initAssistir();
+                  }
+                } else if (
+                  paginaAnterior.includes("perfil.html") &&
+                  typeof initPerfil === "function"
+                ) {
+                  initPerfil();
+                } else if (
+                  paginaAnterior.includes("jogos.html") &&
+                  typeof initJogo === "function"
+                ) {
+                  initJogo();
+                } else if (
+                  paginaAnterior.includes("listagem.html") &&
+                  typeof initListagem === "function"
+                ) {
+                  initListagem();
+                }
+              }, 400);
             });
+        };
+
+        navItems.on("click", function () {
+          const id = $(this).attr("id");
+
+          navItems.removeClass("ni-ativo");
+          $(this).addClass("ni-ativo");
+
+          if (id !== "navbar-pesquisa") {
+            sessionStorage.removeItem("ultimaPesquisa");
+          }
+
+          switch (id) {
+            case "navbar-inicio":
+              carregarPagina("paginas/inicio.html", function () {
+                if (typeof initInicio === "function") initInicio();
+              });
+              break;
+            case "navbar-pesquisa":
+              carregarPagina("paginas/pesquisa.html", function () {
+                if (typeof initPesquisa === "function") initPesquisa();
+              });
+              break;
+            case "navbar-jogo":
+              carregarPagina("paginas/jogos.html", function () {
+                if (typeof initJogo === "function") initJogo();
+              });
+              break;
+            case "navbar-perfil":
+              carregarPagina("paginas/perfil.html", function () {
+                if (typeof initPerfil === "function") initPerfil();
+              });
+              break;
+          }
+        });
+      });
+
+      
         </script>
     </body>
 </html>

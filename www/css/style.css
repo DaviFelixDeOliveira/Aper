@@ -307,6 +307,9 @@ label {
   top: 20px;
   left: 20px;
   z-index: 2;
+  opacity: 0;
+  display: none;
+  transition: 0.3s
 }
 
 .preacesso-form-itens {
@@ -321,6 +324,34 @@ label {
   transition: transform 1.5s ease;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
+}
+
+.senha-container {
+  position: relative;
+  width: 100%;
+}
+
+.senha-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  background-image: url('../imagens/preacesso-olhofechado.png');
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.senha-toggle:hover {
+  color: #333;
 }
 
 .preacesso-cabecalho {
@@ -487,7 +518,7 @@ label {
   gap: 10px;
   position: relative;
   z-index: 1;
-  bottom: 5%;
+  bottom: 60px;
   cursor: pointer;
 }
 
@@ -498,20 +529,25 @@ label {
   cursor: pointer;
 }
 
+
 .slides {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: -webkit-fill-available;
-  height: 50vh;
+  height: 60vh;
 }
 
 .slide {
   width: -webkit-fill-available;
   position: relative;
-  background-image: url("https://corsproxy.io/?https://static.wikia.nocookie.net/dublagem/images/6/64/JW4-BY.jpg/revision/latest/scale-to-width-down/1200?cb=20241014052101&path-prefix=pt-br");
   height: inherit;
   background-size: cover;
+  display: none;
+}
+
+.slide.active{
+  display: block;
 }
 
 .slide::after {
@@ -524,6 +560,34 @@ label {
   margin-bottom: -1px;
   box-shadow: 0px 20px 20px 15px rgba(9, 16, 38, 1);
   z-index: 1;
+}
+
+.slide-indicators {
+  position: relative;
+  bottom: 45px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  z-index: 3;
+}
+
+.slide-indicator {
+  width: 1px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+  transform: scale(-0.7);
+}
+
+.slide-indicator.active {
+  background: #fff;
+  transform: scale(-0.9);
 }
 
 .container-sugeridos {
@@ -784,7 +848,7 @@ label {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 30px 30px 0px 30px;
+  padding: 30px 30px 30px 30px;
 }
 
 .tela-assistir::-webkit-scrollbar {
@@ -832,7 +896,7 @@ label {
   }
 
   .inicio-botao-assistir-slide {
-    bottom: 10%;
+    bottom: 60px;
     width: 15%;
     height: 5vh;
   }
@@ -1266,10 +1330,10 @@ label {
 }
 
 .assistir-botao-voltar {
-  background: #293257;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
   outline: none;
   border-radius: 15px;
-  border: none;
   padding: 25px;
   background-image: url(../imagens/voltar.png);
   background-repeat: no-repeat;
@@ -1279,10 +1343,10 @@ label {
 }
 
 .assistir-botao-assistido {
-  background: #293257;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
   outline: none;
   border-radius: 15px;
-  border: none;
   padding: 25px;
   background-image: url(../imagens/olhofechado.png);
   background-repeat: no-repeat;
@@ -1330,6 +1394,23 @@ svg {
   animation: pop 0.3s ease;
 }
 
+/* Estado normal (não favoritado) */
+.assistir-obra-naocurtir path {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 3;
+  transition: fill 0.3s ease, stroke 0.3s ease, transform 0.3s ease;
+  transform-origin: center;
+  transform-box: fill-box;
+  /* garante que o centro seja relativo ao path */
+}
+
+/* Estado ativo (favoritado) */
+.assistir-obra-naocurtir.active path {
+  stroke: #614bf2;
+  animation: pop 0.3s ease;
+}
+
 /* Animação de "salto" */
 @keyframes pop {
   0% {
@@ -1346,9 +1427,10 @@ svg {
 }
 
 .assistir-obra-titulo {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: 1px;
+  min-width: 0;
 }
 
 .assistir-obra-titulo-acoes {
@@ -1384,7 +1466,8 @@ svg {
 .assistir-obra-review-item {
   display: flex;
   gap: 5px;
-  background: #293257;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
   padding: 13px 15px;
   border-radius: 15px;
 }
@@ -1455,7 +1538,7 @@ svg {
 }
 
 .assistir-dropdown.mostrar {
-  max-height: 441px;
+  max-height: 550px;
   transform: translateY(0);
   opacity: 1;
 }
@@ -1493,6 +1576,8 @@ svg {
   height: 30vh;
   width: -webkit-fill-available;
   border-radius: 20px;
+  background: #091026;
+  color: white;
 }
 
 #div-preview-trailer {
@@ -1518,6 +1603,10 @@ svg {
 }
 
 @media (min-aspect-ratio: 1/1) {
+
+  .inicio-botao-assistir-slide {
+    height: 8vh;
+  }
 
   #div-preview-trailer,
   .assistir-obra-capa,
@@ -1603,10 +1692,10 @@ svg {
 }
 
 .perfil-botao-sair {
-  background: #293257;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
   outline: none;
   border-radius: 15px;
-  border: none;
   padding: 25px;
   background-image: url(../imagens/sair.png);
   background-repeat: no-repeat;
@@ -1679,6 +1768,7 @@ svg {
   border-radius: 15px;
   background-color: #222f4d;
   background-repeat: round;
+      height: 33vw;
 }
 
 .slide-in {
@@ -1993,6 +2083,7 @@ svg {
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  width: -webkit-fill-available;
 }
 
 .listagem-cabecalho {
@@ -2011,16 +2102,16 @@ svg {
 }
 
 .listagem-botao-voltar {
-  background: #293257;
   outline: none;
   border-radius: 15px;
-  border: none;
   padding: 25px;
   background-image: url(../imagens/voltar.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 25px 25px;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .listagem-conteudo {

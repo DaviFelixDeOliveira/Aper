@@ -7,7 +7,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/just-validate@3.5.1/dist/css/justValidateTooltip.min.css">
         <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <title>Document</title>
     </head>
     <body>
@@ -55,8 +54,8 @@
                     <b>Política de Privacidade.</b>
                 </label>
             </div>
+            <button class="preacesso-botao-voltar" id="login-botao-voltar"></button>
             <form class="preacesso-form-itens" id="login-itens">
-                <button class="preacesso-botao-voltar" id="login-botao-voltar"></button>
                 <div class="preacesso-cabecalho">
                     <label class="preacesso-titulo">Entrar</label>
                     <label class="preacesso-subtitulo">
@@ -78,14 +77,17 @@
                     </div>
                     <div class="preacesso-campo">
                         <label for="login-senha">Senha</label>
-                        <input
-                            class="preacesso-input-campo"
-                            type="password"
-                            name="login-senha"
-                            id="login-senha"
-                            required
-                            tabindex="2"
-                        >
+                        <div class="senha-container">
+                            <input
+                                class="preacesso-input-campo"
+                                type="password"
+                                name="login-senha"
+                                id="login-senha"
+                                required
+                                tabindex="2"
+                            >
+                            <button type="button" class="senha-toggle" id="login-senha-toggle"></button>
+                        </div>
                     </div>
                     <div class="preacesso-rodape">
                         <div class="preacesso-checkbox-item">
@@ -105,8 +107,8 @@
                 <button class="preacesso-botao-submit" id="login-submit">Entrar</button>
                 <div class="preacesso-erro" id="login-erro">Email ou senha inválidos</div>
             </form>
+            <button class="preacesso-botao-voltar" id="cadastro-botao-voltar"></button>
             <form class="preacesso-form-itens" id="cadastro-itens">
-                <button class="preacesso-botao-voltar" id="cadastro-botao-voltar"></button>
                 <div class="preacesso-cabecalho">
                     <label class="preacesso-titulo">Criar conta</label>
                     <label class="preacesso-subtitulo">Um passo de entrar no universo do entretenimento.</label>
@@ -136,14 +138,17 @@
                     </div>
                     <div class="preacesso-campo">
                         <label for="cadastro-senha">Senha</label>
-                        <input
-                            class="preacesso-input-campo"
-                            type="password"
-                            name="cadastro-senha"
-                            id="cadastro-senha"
-                            required
-                            tabindex="3"
-                        >
+                        <div class="senha-container">
+                            <input
+                                class="preacesso-input-campo"
+                                type="password"
+                                name="cadastro-senha"
+                                id="cadastro-senha"
+                                required
+                                tabindex="3"
+                            >
+                            <button type="button" class="senha-toggle" id="cadastro-senha-toggle"></button>
+                        </div>
                     </div>
                     <div class="preacesso-rodape">
                         <div class="preacesso-checkbox-item">
@@ -153,7 +158,7 @@
                                 name="cadastro-acordo"
                                 id="cadastro-acordo"
                             >
-                            <label for="cadastro-acordo">
+                            <label for="cadastro-acordo" style="font-size: 15px;">
                                 Eu estou de acordo com os
                                 <b style="text-decoration: underline;">Termos de Serviço</b>
                                 .
@@ -167,6 +172,7 @@
         </div>
         <!-- No final do body -->
         <script src="cordova.js"></script>
+        <script src="components/supabase.min.js"></script>
         <script src="components/conexao.js"></script>
         <script src="components/authgoogle.js"></script>
         <script src="components/logincadastro.js"></script>

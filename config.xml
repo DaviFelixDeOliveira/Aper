@@ -32,7 +32,8 @@
     <preference name="AndroidWindowSplashScreenBackground" value="#091026" />
     <preference name="AndroidWindowSplashScreenIconBackground" value="#091026" />
     <preference name="ShowSplashScreenSpinner" value="false" />
-
+      
+    <preference name="Fullscreen" value="true"/>
     <!-- Ícones e Splash específicos para Android -->
     <platform name="android">
         <icon density="mdpi" src="res/icon.png" />

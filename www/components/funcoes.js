@@ -61,39 +61,138 @@ function abrirPopup(titulo, aoConfirmar) {
     }, 300); // mesmo tempo da transição
   }
 }
-
 // ------------------------
 // INIT INÍCIO - VERSÃO SIMPLES
 // ------------------------
 async function initInicio() {
+  // No seu initInicio(), adicione:
+  function iniciarSlideshow() {
+    const slides = document.querySelectorAll(".slide");
+    const indicatorsContainer = document.querySelector(".slide-indicators");
+    const assistirBtn = document.querySelector(".inicio-botao-assistir-slide");
+    let currentSlide = 0;
+    let slideInterval;
+
+    // Criar indicadores
+    slides.forEach((_, index) => {
+      const indicator = document.createElement("button");
+      indicator.className = `slide-indicator ${index === 0 ? "active" : ""}`;
+      indicator.addEventListener("click", () => {
+        resetTimer();
+        goToSlide(index);
+      });
+      indicatorsContainer.appendChild(indicator);
+    });
+
+    // Esconde todos os slides exceto o primeiro
+    slides.forEach((slide, index) => {
+      if (index !== 0) {
+        slide.style.display = "none";
+      }
+    });
+
+    function goToSlide(index) {
+      // Esconde slide atual
+      slides[currentSlide].style.display = "none";
+      document
+        .querySelectorAll(".slide-indicator")
+        [currentSlide].classList.remove("active");
+
+      // Atualiza slide atual
+      currentSlide = index;
+
+      // Mostra novo slide
+      slides[currentSlide].style.display = "block";
+      document
+        .querySelectorAll(".slide-indicator")
+        [currentSlide].classList.add("active");
+    }
+
+    function nextSlide() {
+      const nextIndex = (currentSlide + 1) % slides.length;
+      goToSlide(nextIndex);
+    }
+
+    function resetTimer() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Botão assistir - vai para a página de assistir
+    assistirBtn.addEventListener("click", () => {
+      const activeSlide = slides[currentSlide];
+      const id = activeSlide.dataset.id;
+      const tipo = activeSlide.dataset.tipo;
+
+      const navbar = document.querySelector(".navbar");
+      if (navbar) navbar.classList.add("navbar-esconde");
+
+      if (id) {
+        console.log(`Abrindo ${tipo}:`, id);
+        carregarPagina("paginas/assistir.html", function () {
+          if (typeof initAssistir === "function") {
+            initAssistir(id, tipo);
+          }
+        });
+      }
+    });
+
+    // Inicia autoplay
+    resetTimer();
+  }
+
+  iniciarSlideshow();
   const userId = localStorage.getItem("usuario_id");
   const apiKey = "e293e84786f06c94bf36414cc9240da4";
   const container = document.querySelector(".container-sugeridos");
 
-  if (!userId || !container) return;
+  console.log(
+    "🔍 DEBUG initInicio - userId:",
+    userId,
+    "container:",
+    !!container
+  );
+
+  if (!userId || !container) {
+    console.log("❌ initInicio abortado - falta userId ou container");
+    return;
+  }
 
   try {
-    const { data: likedWorks } = await window.supabase
+    const { data: likedWorks, error } = await window.supabase
       .from("liked_works")
       .select("work_id")
       .eq("user_id", userId);
 
-    if (!likedWorks || likedWorks.length === 0) return;
+    console.log("📊 DEBUG likedWorks:", likedWorks, "error:", error);
 
-    // Analisar gêneros preferidos
-    const generosPreferidos = await analisarGenerosPreferidos(
-      likedWorks,
-      apiKey
-    );
+    // ✅ CORREÇÃO: CONTINUAR MESMO SEM OBRAS CURTIDAS
+    if (!likedWorks || likedWorks.length === 0) {
+      console.log(
+        "ℹ️ Usuário não tem obras curtidas - mostrando apenas playlists estáticas"
+      );
+    } else {
+      // Analisar gêneros preferidos
+      const generosPreferidos = await analisarGenerosPreferidos(
+        likedWorks,
+        apiKey
+      );
+      console.log("🎯 DEBUG generosPreferidos:", generosPreferidos);
 
-    // Gerar múltiplas playlists
-    await gerarPlaylistsSimples(generosPreferidos, container, apiKey);
+      // Gerar múltiplas playlists
+      await gerarPlaylistsSimples(generosPreferidos, container, apiKey);
+    }
+
+    // CONFIGURAR TODOS OS BOTÕES "VER MAIS" (INCLUINDO ESTÁTICOS E AUTOMÁTICOS)
+    configurarTodosBotoesVerMais();
   } catch (err) {
     console.error("Erro ao gerar playlists personalizadas:", err);
   }
 
   // ---- CLIQUE NAS OBRAS ----
   const obras = document.querySelectorAll(".obra");
+  console.log("🎬 DEBUG obras encontradas:", obras.length);
+
   obras.forEach((obra) => {
     obra.addEventListener("click", () => {
       const navbar = document.querySelector(".navbar");
@@ -102,26 +201,172 @@ async function initInicio() {
       const tipo = obra.dataset.tipo || "movie";
 
       if (id) {
-        console.log(`🎬 Abrindo ${tipo}:`, id);
+        console.log(`Abrindo ${tipo}:`, id);
         carregarPagina("paginas/assistir.html", function () {
           if (typeof initAssistir === "function") {
             initAssistir(id, tipo);
           }
         });
       } else {
-        console.warn("❗ Nenhum data-id encontrado para esta obra.");
+        console.warn("Nenhum data-id encontrado para esta obra.");
       }
     });
   });
 
   // MOSTRAR CONTAINER APÓS GERAR TUDO
   container.style.opacity = "1";
+  console.log("✅ initInicio finalizado - container visível");
+}
+
+// ------------------------
+// CONFIGURAR TODOS OS BOTÕES "VER MAIS" (UNIFICADO)
+// ------------------------
+function configurarTodosBotoesVerMais() {
+  const apiKey = "e293e84786f06c94bf36414cc9240da4";
+  const botoesVerMais = document.querySelectorAll(".lista-ver");
+
+  console.log(`🔧 Configurando ${botoesVerMais.length} botões Ver Mais`);
+
+  botoesVerMais.forEach((botao) => {
+    // VERIFICAR SE JÁ TEM EVENT LISTENER
+    if (botao._configurado) {
+      console.log("Botão já configurado, pulando...");
+      return;
+    }
+
+    botao._configurado = true;
+
+    botao.addEventListener("click", function (e) {
+      e.stopPropagation();
+
+      const lista = this.closest(".lista");
+      const titulo = lista.querySelector(".lista-titulo").textContent;
+
+      console.log(`🎯 BOTÃO CLICADO: ${titulo}`);
+
+      // Mapear títulos estáticos para categorias da API
+      const categoriasEstaticas = {
+        "Então é Natal...": {
+          tipo: "natal",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=207317&sort_by=popularity.desc`,
+        },
+        "Filmes Populares": {
+          tipo: "popular",
+          url: `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=pt-BR&page=1`,
+        },
+        "Nos Cinemas": {
+          tipo: "now_playing",
+          url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=pt-BR&page=1`,
+        },
+        Nacionais: {
+          tipo: "brasil",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_origin_country=BR&vote_count.gte=200&vote_average.gte=6&sort_by=vote_count.desc`,
+        },
+        "Clássicos do Cinema": {
+          tipo: "classicos",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&sort_by=vote_average.desc&vote_count.gte=1000&primary_release_date.lte=2000-12-31`,
+        },
+        "Superação e Coragem": {
+          tipo: "drama",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&sort_by=popularity.desc&with_keywords=191446`,
+        },
+        "Universo Marvel": {
+          tipo: "marvel",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_companies=420|19551|38679|13252&sort_by=popularity.desc`,
+        },
+        "Viagem no Tempo": {
+          tipo: "time_travel",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=4379|1583|12377&sort_by=popularity.desc`,
+        },
+        "Filmes Bíblicos": {
+          tipo: "biblicos",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=3036|230097|253695&sort_by=popularity.desc`,
+        },
+        "Filmes de Anime": {
+          tipo: "anime",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_original_language=ja&sort_by=popularity.desc`,
+        },
+        "Para não assistir sozinho": {
+          tipo: "terror",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=27&sort_by=popularity.desc`,
+        },
+        "O melhor da comédia": {
+          tipo: "comedia",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=35&sort_by=popularity.desc`,
+        },
+        "Caiu um cisco no meu olho...": {
+          tipo: "drama_emocional",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=18&sort_by=vote_average.desc&vote_count.gte=100`,
+        },
+        "Momento em família": {
+          tipo: "familia",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=10751&sort_by=popularity.desc`,
+        },
+        "Além da realidade": {
+          tipo: "ficcao",
+          url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=878&sort_by=popularity.desc`,
+        },
+      };
+
+      // VERIFICAR SE É UMA PLAYLIST ESTÁTICA
+      if (categoriasEstaticas[titulo]) {
+        const categoria = categoriasEstaticas[titulo];
+
+        // Salvar dados para a listagem
+        sessionStorage.setItem("listaTipo", "playlist");
+        sessionStorage.setItem("playlistGenero", categoria.tipo);
+        sessionStorage.setItem("playlistTitulo", titulo);
+        sessionStorage.setItem("playlistUrl", categoria.url);
+
+        console.log(
+          `📋 Navegando para playlist estática: ${titulo}`,
+          categoria.url
+        );
+      }
+      // SE NÃO FOR ESTÁTICA, É UMA PLAYLIST AUTOMÁTICA - BUSCAR DATA-ATTRIBUTES
+      else {
+        const generoId = lista.dataset.generoId || "popular";
+        const playlistTipo = lista.dataset.playlistTipo || "discover";
+
+        // CONSTRUIR URL BASEADA NO TIPO DE PLAYLIST AUTOMÁTICA
+        let url = "";
+        if (generoId === "trending") {
+          url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=pt-BR&page=1`;
+        } else if (generoId === "popular") {
+          url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=pt-BR&page=1`;
+        } else if (generoId.includes(",")) {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${generoId}&sort_by=vote_count.desc&page=1`;
+        } else {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${generoId}&sort_by=popularity.desc&page=1`;
+        }
+
+        // Salvar dados para a listagem
+        sessionStorage.setItem("listaTipo", "playlist");
+        sessionStorage.setItem("playlistGenero", generoId);
+        sessionStorage.setItem("playlistTitulo", titulo);
+        sessionStorage.setItem("playlistUrl", url);
+
+        console.log(`📋 Navegando para playlist automática: ${titulo}`, url);
+      }
+
+      // CARREGAR PÁGINA DE LISTAGEM
+      if (typeof window.carregarPagina === "function") {
+        window.carregarPagina("paginas/listagem.html", function () {
+          if (typeof initListagem === "function") {
+            initListagem();
+          }
+        });
+      }
+    });
+  });
 }
 
 // ------------------------
 // ANÁLISE DE GÊNEROS PREFERIDOS
 // ------------------------
 async function analisarGenerosPreferidos(likedWorks, apiKey) {
+  console.log("🔍 analisarGenerosPreferidos - obras:", likedWorks.length);
+
   let generos = {};
 
   for (const work of likedWorks.slice(0, 15)) {
@@ -148,17 +393,25 @@ async function analisarGenerosPreferidos(likedWorks, apiKey) {
     }
   }
 
-  return Object.entries(generos)
+  const resultado = Object.entries(generos)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 4)
     .map((item) => item[0]);
+
+  console.log("🎯 analisarGenerosPreferidos resultado:", resultado);
+  return resultado;
 }
 
 // ------------------------
 // GERAR MÚLTIPLAS PLAYLISTS SIMPLES
 // ------------------------
 async function gerarPlaylistsSimples(generosPreferidos, container, apiKey) {
-  if (generosPreferidos.length === 0) return;
+  console.log("🎵 gerarPlaylistsSimples - gêneros:", generosPreferidos.length);
+
+  if (generosPreferidos.length === 0) {
+    console.log("❌ gerarPlaylistsSimples - sem gêneros, saindo");
+    return;
+  }
 
   // Playlist do gênero principal
   await gerarPlaylistPorGenero(generosPreferidos[0], container, apiKey);
@@ -175,24 +428,36 @@ async function gerarPlaylistsSimples(generosPreferidos, container, apiKey) {
   if (generosPreferidos.length > 2) {
     await gerarPlaylistDescobertas(generosPreferidos, container, apiKey);
   }
+
+  console.log("✅ gerarPlaylistsSimples finalizado");
 }
 
 // ------------------------
-// GERAR PLAYLIST POR GÊNERO
+// GERAR PLAYLIST POR GÊNERO (COM CONVERSÃO EM LOTE)
 // ------------------------
 async function gerarPlaylistPorGenero(generoId, container, apiKey) {
   try {
+    console.log(`🎬 gerarPlaylistPorGenero - gênero: ${generoId}`);
+
     const res = await fetch(
       `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${generoId}&sort_by=popularity.desc`
     );
     const data = await res.json();
 
-    if (!data.results?.length) return;
+    if (!data.results?.length) {
+      console.log(
+        `❌ gerarPlaylistPorGenero - sem resultados para gênero ${generoId}`
+      );
+      return;
+    }
 
     const titulo = gerarTituloPorGenero(generoId);
 
     const playlistDiv = document.createElement("div");
     playlistDiv.classList.add("lista");
+    playlistDiv.dataset.generoId = generoId;
+    playlistDiv.dataset.playlistTipo = "genero";
+
     playlistDiv.innerHTML = `
       <div class="lista-cabecalho">
         <label class="lista-titulo">${titulo}</label>
@@ -203,10 +468,17 @@ async function gerarPlaylistPorGenero(generoId, container, apiKey) {
 
     const obrasDiv = playlistDiv.querySelector(".lista-obras");
 
-    for (const filme of data.results.slice(0, 10)) {
+    // CONVERSÃO EM LOTE - pega todos os IDs de uma vez
+    const filmes = data.results.slice(0, 10);
+    const tmdbIds = filmes.map((filme) => filme.id);
+    const mapaConversao = await converterMultiplosParaImdbIds(tmdbIds, apiKey);
+
+    for (const filme of filmes) {
+      const imdbId = mapaConversao[filme.id]; // USA O MAPA DE CONVERSÃO
+
       const obraDiv = document.createElement("div");
       obraDiv.classList.add("obra");
-      obraDiv.dataset.id = filme.id;
+      obraDiv.dataset.id = imdbId || filme.id; // USA IMDB ID (fallback para TMDB)
       obraDiv.dataset.tipo = "movie";
       obraDiv.innerHTML = `
         <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/w500${
@@ -217,30 +489,37 @@ async function gerarPlaylistPorGenero(generoId, container, apiKey) {
       obrasDiv.appendChild(obraDiv);
     }
 
-    // Configurar botão "Ver mais"
-    const botaoVerMais = playlistDiv.querySelector(".lista-ver");
-    configurarBotaoVerMaisPlaylist(botaoVerMais, generoId, titulo);
-
     container.prepend(playlistDiv);
+    console.log(
+      `✅ gerarPlaylistPorGenero - playlist "${titulo}" criada com ${filmes.length} obras`
+    );
   } catch (err) {
     console.error("Erro ao gerar playlist:", err);
   }
 }
 
 // ------------------------
-// GERAR PLAYLIST DE TENDÊNCIAS
+// GERAR PLAYLIST DE TENDÊNCIAS (COM CONVERSÃO EM LOTE)
 // ------------------------
 async function gerarPlaylistTendencias(container, apiKey) {
   try {
+    console.log("🎬 gerarPlaylistTendencias");
+
     const res = await fetch(
       `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=pt-BR`
     );
     const data = await res.json();
 
-    if (!data.results?.length) return;
+    if (!data.results?.length) {
+      console.log("❌ gerarPlaylistTendencias - sem resultados");
+      return;
+    }
 
     const playlistDiv = document.createElement("div");
     playlistDiv.classList.add("lista");
+    playlistDiv.dataset.generoId = "trending";
+    playlistDiv.dataset.playlistTipo = "trending";
+
     playlistDiv.innerHTML = `
       <div class="lista-cabecalho">
         <label class="lista-titulo">Em Alta Agora</label>
@@ -251,10 +530,17 @@ async function gerarPlaylistTendencias(container, apiKey) {
 
     const obrasDiv = playlistDiv.querySelector(".lista-obras");
 
-    for (const filme of data.results.slice(0, 10)) {
+    // CONVERSÃO EM LOTE - pega todos os IDs de uma vez
+    const filmes = data.results.slice(0, 10);
+    const tmdbIds = filmes.map((filme) => filme.id);
+    const mapaConversao = await converterMultiplosParaImdbIds(tmdbIds, apiKey);
+
+    for (const filme of filmes) {
+      const imdbId = mapaConversao[filme.id]; // USA O MAPA DE CONVERSÃO
+
       const obraDiv = document.createElement("div");
       obraDiv.classList.add("obra");
-      obraDiv.dataset.id = filme.id;
+      obraDiv.dataset.id = imdbId || filme.id; // USA IMDB ID (fallback para TMDB)
       obraDiv.dataset.tipo = "movie";
       obraDiv.innerHTML = `
         <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/w500${
@@ -265,32 +551,36 @@ async function gerarPlaylistTendencias(container, apiKey) {
       obrasDiv.appendChild(obraDiv);
     }
 
-    // Configurar botão "Ver mais" para tendências
-    const botaoVerMais = playlistDiv.querySelector(".lista-ver");
-    configurarBotaoVerMaisPlaylist(botaoVerMais, "trending", "Em Alta Agora");
-
     container.prepend(playlistDiv);
+    console.log("✅ gerarPlaylistTendencias - playlist criada");
   } catch (err) {
     console.error("Erro ao gerar playlist de tendências:", err);
   }
 }
 
 // ------------------------
-// GERAR PLAYLIST DE DESCOBERTAS
+// GERAR PLAYLIST DE DESCOBERTAS (COM CONVERSÃO EM LOTE)
 // ------------------------
 async function gerarPlaylistDescobertas(generosPreferidos, container, apiKey) {
   try {
     const generosMix = generosPreferidos.slice(0, 2).join(",");
+    console.log(`🎬 gerarPlaylistDescobertas - mix: ${generosMix}`);
 
     const res = await fetch(
       `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${generosMix}&sort_by=vote_count.desc`
     );
     const data = await res.json();
 
-    if (!data.results?.length) return;
+    if (!data.results?.length) {
+      console.log("❌ gerarPlaylistDescobertas - sem resultados");
+      return;
+    }
 
     const playlistDiv = document.createElement("div");
     playlistDiv.classList.add("lista");
+    playlistDiv.dataset.generoId = generosMix;
+    playlistDiv.dataset.playlistTipo = "descobertas";
+
     playlistDiv.innerHTML = `
       <div class="lista-cabecalho">
         <label class="lista-titulo">Recomendados para Você</label>
@@ -301,10 +591,17 @@ async function gerarPlaylistDescobertas(generosPreferidos, container, apiKey) {
 
     const obrasDiv = playlistDiv.querySelector(".lista-obras");
 
-    for (const filme of data.results.slice(0, 10)) {
+    // CONVERSÃO EM LOTE - pega todos os IDs de uma vez
+    const filmes = data.results.slice(0, 10);
+    const tmdbIds = filmes.map((filme) => filme.id);
+    const mapaConversao = await converterMultiplosParaImdbIds(tmdbIds, apiKey);
+
+    for (const filme of filmes) {
+      const imdbId = mapaConversao[filme.id]; // USA O MAPA DE CONVERSÃO
+
       const obraDiv = document.createElement("div");
       obraDiv.classList.add("obra");
-      obraDiv.dataset.id = filme.id;
+      obraDiv.dataset.id = imdbId || filme.id; // USA IMDB ID (fallback para TMDB)
       obraDiv.dataset.tipo = "movie";
       obraDiv.innerHTML = `
         <div class="obra-capa" style="background-image:url('https://image.tmdb.org/t/p/w500${
@@ -315,17 +612,56 @@ async function gerarPlaylistDescobertas(generosPreferidos, container, apiKey) {
       obrasDiv.appendChild(obraDiv);
     }
 
-    // Configurar botão "Ver mais" para descobertas
-    const botaoVerMais = playlistDiv.querySelector(".lista-ver");
-    configurarBotaoVerMaisPlaylist(
-      botaoVerMais,
-      generosMix,
-      "Recomendados para Você"
-    );
-
     container.prepend(playlistDiv);
+    console.log("✅ gerarPlaylistDescobertas - playlist criada");
   } catch (err) {
     console.error("Erro ao gerar playlist de descobertas:", err);
+  }
+}
+// ------------------------
+// FUNÇÃO PARA CONVERTER MÚLTIPLOS IDs DE UMA VEZ (BATCH)
+// ------------------------
+async function converterMultiplosParaImdbIds(tmdbIds, apiKey) {
+  try {
+    console.log(`🔄 Convertendo ${tmdbIds.length} IDs em lote...`);
+
+    // Cria um array de promises para todas as conversões
+    const promises = tmdbIds.map(async (tmdbId) => {
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/movie/${tmdbId}/external_ids?api_key=${apiKey}`
+        );
+        const data = await res.json();
+
+        return {
+          tmdbId: tmdbId,
+          imdbId:
+            data.imdb_id && data.imdb_id.startsWith("tt") ? data.imdb_id : null,
+        };
+      } catch (error) {
+        console.error(`❌ Erro ao converter TMDB ${tmdbId}:`, error);
+        return { tmdbId: tmdbId, imdbId: null };
+      }
+    });
+
+    // Executa TODAS as conversões simultaneamente
+    const resultados = await Promise.all(promises);
+
+    // Cria um mapa rápido: TMDB ID → IMDB ID
+    const mapaConversao = {};
+    resultados.forEach((result) => {
+      mapaConversao[result.tmdbId] = result.imdbId;
+    });
+
+    console.log(
+      `✅ Conversão em lote concluída: ${
+        resultados.filter((r) => r.imdbId).length
+      }/${tmdbIds.length} convertidos`
+    );
+    return mapaConversao;
+  } catch (error) {
+    console.error("❌ Erro na conversão em lote:", error);
+    return {};
   }
 }
 
@@ -422,131 +758,8 @@ function gerarTituloPorGenero(generoId) {
 
   const opcoes = nomesGeneros[generoId] || ["Recomendado pra Você"];
   return opcoes[Math.floor(Math.random() * opcoes.length)];
-}
-
-// ------------------------
-// CONFIGURAR BOTÕES "VER MAIS" DAS PLAYLISTS
-// ------------------------
-function configurarBotaoVerMaisPlaylist(botao, generoId, titulo) {
-  botao.addEventListener("click", () => {
-    // Salva os dados da playlist no sessionStorage
-    sessionStorage.setItem("listaTipo", "playlist");
-    sessionStorage.setItem("playlistGenero", generoId);
-    sessionStorage.setItem("playlistTitulo", titulo);
-
-    if (typeof window.carregarPagina === "function") {
-      window.carregarPagina("paginas/listagem.html", () => {
-        if (typeof initListagem === "function") {
-          initListagem();
-        }
-      });
-    }
-  });
-}
-
-// ------------------------
-// CONFIGURAR BOTÕES "VER MAIS" DAS PLAYLISTS ESTÁTICAS
-// ------------------------
-function configurarBotoesVerMaisEstaticos() {
-  const botoesVerMais = document.querySelectorAll(".lista-ver");
-
-  botoesVerMais.forEach((botao) => {
-    // Só configura se não tiver sido configurado ainda
-    if (!botao._configurado) {
-      botao._configurado = true;
-
-      botao.addEventListener("click", function (e) {
-        e.stopPropagation();
-
-        const lista = this.closest(".lista");
-        const titulo = lista.querySelector(".lista-titulo").textContent;
-
-        // Mapear títulos estáticos para categorias da API
-        const categorias = {
-          "Então é Natal...": {
-            tipo: "natal",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=christmas,holiday&sort_by=popularity.desc`,
-          },
-          "Filmes Populares": {
-            tipo: "popular",
-            url: `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=pt-BR&page=1`,
-          },
-          "Nos Cinemas": {
-            tipo: "now_playing",
-            url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=pt-BR&page=1`,
-          },
-          Nacionais: {
-            tipo: "brasil",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_original_language=pt&sort_by=popularity.desc`,
-          },
-          "Clássicos do Cinema": {
-            tipo: "classicos",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&sort_by=vote_average.desc&vote_count.gte=1000&primary_release_date.lte=2000-12-31`,
-          },
-          "Superação e Coragem": {
-            tipo: "drama",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=18&sort_by=popularity.desc`,
-          },
-          "Universo Marvel": {
-            tipo: "marvel",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_companies=420|19551|38679|13252&sort_by=popularity.desc`,
-          },
-          "Viagem no Tempo": {
-            tipo: "time_travel",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=time-travel&sort_by=popularity.desc`,
-          },
-          "Filmes Bíblicos": {
-            tipo: "biblicos",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_keywords=bible,biblical&sort_by=popularity.desc`,
-          },
-          "Filmes de Anime": {
-            tipo: "anime",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_original_language=ja&sort_by=popularity.desc`,
-          },
-          "Para não assistir sozinho": {
-            tipo: "terror",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=27&sort_by=popularity.desc`,
-          },
-          "O melhor da comédia": {
-            tipo: "comedia",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=35&sort_by=popularity.desc`,
-          },
-          "Caiu um cisco no meu olho...": {
-            tipo: "drama_emocional",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=18&sort_by=vote_average.desc&vote_count.gte=100`,
-          },
-          "Momento em família": {
-            tipo: "familia",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=10751&sort_by=popularity.desc`,
-          },
-          "Além da realidade": {
-            tipo: "ficcao",
-            url: `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=878&sort_by=popularity.desc`,
-          },
-        };
-
-        const categoria = categorias[titulo] || categorias["Filmes Populares"];
-
-        // Salvar dados para a listagem
-        sessionStorage.setItem("listaTipo", "playlist");
-        sessionStorage.setItem("playlistGenero", categoria.tipo);
-        sessionStorage.setItem("playlistTitulo", titulo);
-        sessionStorage.setItem("playlistUrl", categoria.url);
-
-        // Navegar para a página de listagem
-        if (typeof window.carregarPagina === "function") {
-          window.carregarPagina("paginas/listagem.html", () => {
-            if (typeof initListagem === "function") {
-              initListagem();
-            }
-          });
-        }
-      });
-    }
-  });
-}
-// ------------------------
-// INIT PESQUISA - VERSÃO CORRIGIDA
+}// ------------------------
+// INIT PESQUISA - VERSÃO OTIMIZADA
 // ------------------------
 function initPesquisa() {
   const apiKey = "e293e84786f06c94bf36414cc9240da4";
@@ -642,7 +855,7 @@ function initPesquisa() {
     inputPesquisa.value = "";
     sessionStorage.removeItem("ultimaPesquisa");
     divBusca.innerHTML = "";
-    divBusca.style.display = "none"; // ← ESCONDE a div de busca
+    divBusca.style.display = "none";
     divPesquisados.style.display = "flex";
     clearTimeout(debounceTimer);
     atualizarHistoricoDisplay();
@@ -652,15 +865,15 @@ function initPesquisa() {
   const pesquisaSalva = sessionStorage.getItem("ultimaPesquisa");
   if (pesquisaSalva) {
     inputPesquisa.value = pesquisaSalva;
-    divPesquisados.style.display = "none"; // ← ESCONDE histórico imediatamente
-    divBusca.style.display = "flex"; // ← MOSTRA busca imediatamente
+    divPesquisados.style.display = "none";
+    divBusca.style.display = "flex";
     searchMovies(pesquisaSalva);
   } else {
-    divBusca.style.display = "none"; // ← Garante que busca está escondida
+    divBusca.style.display = "none";
     atualizarHistoricoDisplay();
   }
 
-  // Função de busca
+  // FUNÇÃO DE BUSCA OTIMIZADA
   async function searchMovies(query) {
     if (!query && inputPesquisa.value === "") {
       divBusca.innerHTML = "";
@@ -684,14 +897,22 @@ function initPesquisa() {
     divPesquisados.style.display = "none";
     divBusca.style.display = "flex";
 
+    // LIMPA caracteres especiais e prepara query
+    const queryLimpa = query
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[-:]/g, " ") // Substitui hífens e dois pontos por espaços
+      .replace(/\s+/g, " ") // Remove espaços extras
+      .trim();
+
     const url = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(
-      query
-    )}&language=pt-BR`;
+      queryLimpa
+    )}&language=pt-BR&page=1&include_adult=false`;
 
     try {
       const response = await fetch(url);
       const data = await response.json();
-      displayResults(data.results);
+      displayResults(data.results, query.toLowerCase());
     } catch (error) {
       console.error("Erro na busca:", error);
     }
@@ -704,17 +925,38 @@ function initPesquisa() {
     return await response.json();
   }
 
-  // Monta cards
-  async function displayResults(results) {
+  // MONTA CARDS OTIMIZADO
+  async function displayResults(results, queryOriginal) {
     divBusca.innerHTML = "";
     divBusca.style.display = "flex";
-    const query = inputPesquisa.value.trim().toLowerCase();
+    
+    if (!results || results.length === 0) {
+      divBusca.innerHTML = '<div class="nenhum-resultado">Nenhum resultado encontrado</div>';
+      return;
+    }
+
     const seen = new Set();
+    let resultadosExibidos = 0;
+    const MAX_RESULTADOS = 50; // Aumentei para 50 resultados
+
+    // Função para verificar se o resultado corresponde à pesquisa
+    function correspondePesquisa(result, query) {
+      if (!query) return true;
+      
+      const title = (result.title || result.name || "").toLowerCase();
+      const queryParts = query.toLowerCase().split(" ");
+      
+      // Verifica se TODAS as partes da query estão no título
+      return queryParts.every(part => title.includes(part));
+    }
 
     for (const result of results) {
+      if (resultadosExibidos >= MAX_RESULTADOS) break;
+
+      // Verifica se corresponde à pesquisa antes de processar
+      if (!correspondePesquisa(result, queryOriginal)) continue;
+
       if (!result.poster_path) continue;
-      const title = (result.title || result.name || "").trim();
-      if (!title.toLowerCase().startsWith(query)) continue;
 
       const type = result.media_type === "tv" ? "tv" : "movie";
       const details = await getContentDetails(result.id, type);
@@ -727,6 +969,7 @@ function initPesquisa() {
       if (!contentId || seen.has(contentId)) continue;
       seen.add(contentId);
 
+      const title = (result.title || result.name || "").trim();
       const capaUrl = `https://images.weserv.nl/?url=image.tmdb.org/t/p/w500${result.poster_path}`;
       const generos =
         (details.genres || []).map((g) => g.name).join(", ") || "—";
@@ -810,10 +1053,16 @@ function initPesquisa() {
       });
 
       divBusca.appendChild(wrapper);
+      resultadosExibidos++;
+    }
+
+    // Se não encontrou resultados que correspondem à pesquisa
+    if (resultadosExibidos === 0) {
+      divBusca.innerHTML = '<div class="nenhum-resultado">Nenhum resultado encontrado para sua pesquisa</div>';
     }
   }
 
-  // Evento input com debounce - CORRIGIDO: só salva no histórico quando terminar de digitar
+  // Evento input com debounce
   let debounceTimer;
   let ultimaPesquisaSalva = "";
 
@@ -822,18 +1071,16 @@ function initPesquisa() {
     debounceTimer = setTimeout(() => {
       const query = inputPesquisa.value.trim();
 
-      // Só salva no histórico se for diferente da última pesquisa salva
-      // e se o usuário parou de digitar (query não está vazia)
       if (query && query !== ultimaPesquisaSalva) {
         adicionarAoHistorico(query);
         ultimaPesquisaSalva = query;
       }
 
       searchMovies(query);
-    }, 800); // Aumentei para 800ms para garantir que terminou de digitar
+    }, 800);
   });
 
-  // Evento quando o input perde o foco (usuário terminou de digitar)
+  // Evento quando o input perde o foco
   inputPesquisa.addEventListener("blur", () => {
     const query = inputPesquisa.value.trim();
     if (query && query !== ultimaPesquisaSalva) {
@@ -842,6 +1089,11 @@ function initPesquisa() {
     }
   });
 }
+// ------------------------
+// INIT ASSISTIR
+// ------------------------
+// ADICIONE ESTA VARIÁVEL NO INÍCIO DO ARQUIVO (fora de qualquer função)
+let trailerTimeout = null;
 
 async function initAssistir(obraIdParam, tipoParam) {
   const obraId =
@@ -856,6 +1108,12 @@ async function initAssistir(obraIdParam, tipoParam) {
   const botaoAssistir = document.getElementById("botao-assistir");
   const dropdown = document.getElementById("dropdown-servidores");
   const botoesServidor = document.querySelectorAll(".assistir-botao-servidor");
+
+  // LIMPA O TIMEOUT ANTERIOR AO INICIAR
+  if (trailerTimeout) {
+    clearTimeout(trailerTimeout);
+    trailerTimeout = null;
+  }
 
   // Abrir/fechar dropdown
   botaoAssistir.addEventListener("click", function (e) {
@@ -913,45 +1171,77 @@ async function initAssistir(obraIdParam, tipoParam) {
       `https://api.themoviedb.org/3/${tipo}/${obraId}/images?api_key=${apiKey}`
     );
     const imgData = await imgRes.json();
-    const backdrop = imgData.backdrops?.[0]?.file_path || detalhes.poster_path;
-    if (backdrop) {
-      const imageUrl = `https://image.tmdb.org/t/p/original${backdrop}`;
+
+    // FUNÇÃO PARA ESCOLHER O MELHOR BACKDROP COM PRIORIDADE DE IDIOMAS
+    function escolherMelhorBackdrop(backdrops) {
+      if (!backdrops || !backdrops.length) return null;
+
+      const backdropsFiltrados = backdrops.filter(
+        (img) => img.width > img.height
+      );
+      if (!backdropsFiltrados.length) return null;
+
+      const prioridade = {
+        "pt-BR": 1,
+        "pt-PT": 2,
+        pt: 3,
+        "en-US": 4,
+        en: 5,
+        null: 6,
+        undefined: 6,
+      };
+
+      backdropsFiltrados.sort((a, b) => {
+        const pa = prioridade[a.iso_639_1] || 9;
+        const pb = prioridade[b.iso_639_1] || 9;
+        if (pa !== pb) return pa - pb;
+        return (b.vote_average || 0) - (a.vote_average || 0);
+      });
+
+      return backdropsFiltrados[0]?.file_path || null;
+    }
+
+    const melhorBackdrop =
+      escolherMelhorBackdrop(imgData.backdrops) || detalhes.poster_path;
+
+    if (melhorBackdrop) {
+      const imageUrl = `https://image.tmdb.org/t/p/original${melhorBackdrop}`;
 
       // Cria o estilo para o ::before
       const style = document.createElement("style");
       style.id = "slide-in-background-style"; // Adiciona um ID único
       style.textContent = `
-        .tela-assistir::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(9, 16, 38, 0.8);
-            z-index: 0;
-            background-image: url('${imageUrl}');
-            background-size: cover;
-            background-position: center;
-            filter: blur(100px);
-            transform: scale(1.2);
-            opacity: 0;
-            animation: fadeInBackground 1.5s ease 2s forwards;
-        }
-        
-        .tela-assistir > * {
-            position: relative;
-            z-index: 1;
-        }
-        
-        @keyframes fadeInBackground {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 0.3;
-            }
-        }
+      .tela-assistir::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(9, 16, 38, 0.8);
+          z-index: 0;
+          background-image: url('${imageUrl}');
+          background-size: cover;
+          background-position: center;
+          filter: blur(50px);
+          transform: scale(1.2);
+          opacity: 0;
+          animation: fadeInBackground 1.5s ease 2s forwards;
+      }
+      
+      .tela-assistir > * {
+          position: relative;
+          z-index: 1;
+      }
+      
+      @keyframes fadeInBackground {
+          from {
+              opacity: 0;
+          }
+          to {
+              opacity: 0.3;
+          }
+      }
     `;
       document.head.appendChild(style);
     }
@@ -965,10 +1255,40 @@ async function initAssistir(obraIdParam, tipoParam) {
     );
     const imgData = await imgRes.json();
 
-    // Usa o primeiro backdrop disponível (ou fallback pro poster)
-    const backdrop = imgData.backdrops?.[0]?.file_path || detalhes.poster_path;
-    if (backdrop) {
-      capaDiv.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${backdrop}')`;
+    // FUNÇÃO PARA ESCOLHER O MELHOR BACKDROP (REUTILIZADA)
+    function escolherMelhorBackdrop(backdrops) {
+      if (!backdrops || !backdrops.length) return null;
+
+      const backdropsFiltrados = backdrops.filter(
+        (img) => img.width > img.height
+      );
+      if (!backdropsFiltrados.length) return null;
+
+      const prioridade = {
+        "pt-BR": 1,
+        "pt-PT": 2,
+        pt: 3,
+        "en-US": 4,
+        en: 5,
+        null: 6,
+        undefined: 6,
+      };
+
+      backdropsFiltrados.sort((a, b) => {
+        const pa = prioridade[a.iso_639_1] || 9;
+        const pb = prioridade[b.iso_639_1] || 9;
+        if (pa !== pb) return pa - pb;
+        return (b.vote_average || 0) - (a.vote_average || 0);
+      });
+
+      return backdropsFiltrados[0]?.file_path || null;
+    }
+
+    // Usa o melhor backdrop disponível (ou fallback pro poster)
+    const melhorBackdrop =
+      escolherMelhorBackdrop(imgData.backdrops) || detalhes.poster_path;
+    if (melhorBackdrop) {
+      capaDiv.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${melhorBackdrop}')`;
     }
   }
 
@@ -1021,6 +1341,7 @@ async function initAssistir(obraIdParam, tipoParam) {
 
   const userId = localStorage.getItem("usuario_id");
   const curtirBtn = document.getElementById("assistir-obra-curtir");
+  const naoCurtirBtn = document.getElementById("assistir-obra-naocurtir");
 
   // -----------------------------
   // 🔹 MARCAR COMO ASSISTIDO
@@ -1076,22 +1397,35 @@ async function initAssistir(obraIdParam, tipoParam) {
       console.error("Erro ao lidar com watched_works:", err);
     }
   }
-
-  // 🔹 Verifica se já curtiu ao carregar
-  if (curtirBtn && userId && obraId) {
+  // 🔹 Verifica se já curtiu ou não curtiu ao carregar
+  if (curtirBtn && naoCurtirBtn && userId && obraId) {
     try {
-      const { data: likedWorks, error: fetchError } = await window.supabase
+      // Verifica se já curtiu
+      const { data: likedWorks, error: fetchLikeError } = await window.supabase
         .from("liked_works")
         .select("*")
         .eq("user_id", userId)
         .eq("work_id", obraId)
         .maybeSingle();
 
-      if (!fetchError && likedWorks) {
+      if (!fetchLikeError && likedWorks) {
         curtirBtn.classList.add("active");
       }
+
+      // Verifica se já não curtiu
+      const { data: dislikedWorks, error: fetchDislikeError } =
+        await window.supabase
+          .from("disliked_works")
+          .select("*")
+          .eq("user_id", userId)
+          .eq("work_id", obraId)
+          .maybeSingle();
+
+      if (!fetchDislikeError && dislikedWorks) {
+        naoCurtirBtn.classList.add("active");
+      }
     } catch (err) {
-      console.error("Erro ao verificar liked_works:", err);
+      console.error("Erro ao verificar preferências:", err);
     }
 
     // 🔹 Curtir / descurtir
@@ -1107,7 +1441,8 @@ async function initAssistir(obraIdParam, tipoParam) {
         if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
 
         if (likedWorks) {
-          const { error: delError } = await window.window.supabase
+          // Remove curtida
+          const { error: delError } = await window.supabase
             .from("liked_works")
             .delete()
             .eq("user_id", userId)
@@ -1115,14 +1450,71 @@ async function initAssistir(obraIdParam, tipoParam) {
           if (delError) throw delError;
           curtirBtn.classList.remove("active");
         } else {
+          // Adiciona curtida e remove não curtida se existir
+          const { error: delDislikeError } = await window.supabase
+            .from("disliked_works")
+            .delete()
+            .eq("user_id", userId)
+            .eq("work_id", obraId);
+
+          if (delDislikeError && delDislikeError.code !== "PGRST116")
+            throw delDislikeError;
+
           const { error: insertError } = await window.supabase
             .from("liked_works")
             .insert([{ user_id: userId, work_id: obraId }]);
           if (insertError) throw insertError;
+
           curtirBtn.classList.add("active");
+          naoCurtirBtn.classList.remove("active");
         }
       } catch (err) {
         console.error("Erro ao curtir/descurtir obra:", err);
+      }
+    });
+
+    // 🔹 Não curtir / remover não curtida
+    naoCurtirBtn.addEventListener("click", async () => {
+      try {
+        const { data: dislikedWorks, error: fetchError } = await window.supabase
+          .from("disliked_works")
+          .select("*")
+          .eq("user_id", userId)
+          .eq("work_id", obraId)
+          .maybeSingle();
+
+        if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+
+        if (dislikedWorks) {
+          // Remove não curtida
+          const { error: delError } = await window.supabase
+            .from("disliked_works")
+            .delete()
+            .eq("user_id", userId)
+            .eq("work_id", obraId);
+          if (delError) throw delError;
+          naoCurtirBtn.classList.remove("active");
+        } else {
+          // Adiciona não curtida e remove curtida se existir
+          const { error: delLikeError } = await window.supabase
+            .from("liked_works")
+            .delete()
+            .eq("user_id", userId)
+            .eq("work_id", obraId);
+
+          if (delLikeError && delLikeError.code !== "PGRST116")
+            throw delLikeError;
+
+          const { error: insertError } = await window.supabase
+            .from("disliked_works")
+            .insert([{ user_id: userId, work_id: obraId }]);
+          if (insertError) throw insertError;
+
+          naoCurtirBtn.classList.add("active");
+          curtirBtn.classList.remove("active");
+        }
+      } catch (err) {
+        console.error("Erro ao não curtir/remover não curtida:", err);
       }
     });
   }
@@ -1130,6 +1522,12 @@ async function initAssistir(obraIdParam, tipoParam) {
   document
     .getElementById("assistir-botao-voltar")
     .addEventListener("click", () => {
+      // LIMPA O TIMEOUT AO SAIR DA PÁGINA
+      if (trailerTimeout) {
+        clearTimeout(trailerTimeout);
+        trailerTimeout = null;
+      }
+
       if (typeof window.voltarPagina === "function") {
         window.voltarPagina();
       }
@@ -1146,10 +1544,19 @@ async function initAssistir(obraIdParam, tipoParam) {
         }
       }, 500);
     });
+
   // ------------------------
   // SERVIDORES COM IFRAME
   // ------------------------
   const servidores = [
+    {
+      movie: `https://superflixapi.asia/filme/${obraId}#noLink#color:614bf2`,
+      tv: `https://superflixapi.asia/serie/${obraId}#noLink#color:614bf2`,
+    },
+    {
+      movie: `https://fshd.link/filme/${obraId}`,
+      tv: `https://fshd.link/serie/${obraId}`,
+    },
     {
       movie: `https://embed.warezcdn.link/filme/${obraId}`,
       tv: `https://embed.warezcdn.link/serie/${obraId}`,
@@ -1159,12 +1566,12 @@ async function initAssistir(obraIdParam, tipoParam) {
       tv: `https://embed.embedplayer.site/serie/${obraId}`,
     },
     {
-      movie: `https://superflixapi.asia/filme/${obraId}`,
-      tv: `https://superflixapi.asia/serie/${obraId}`,
-    },
-    {
       movie: `https://assistirseriesonline.icu/filme/${obraId}/`,
       tv: `https://assistirseriesonline.icu/embed/${obraId}/`,
+    },
+    {
+      movie: `https://fembed.sx/e/${obraId}/`,
+      tv: `https://fembed.sx/e/${obraId}/1-1`,
     },
     {
       movie: `https://playerflixapi.com/filme/${obraId}/`,
@@ -1183,7 +1590,6 @@ async function initAssistir(obraIdParam, tipoParam) {
       tv: `https://moviesapi.club/tv/${obraId}`,
     },
   ];
-
   // Fechar dropdown e carregar servidor ao clicar em um botão
   botoesServidor.forEach((botao, index) => {
     botao.addEventListener("click", function () {
@@ -1197,9 +1603,12 @@ async function initAssistir(obraIdParam, tipoParam) {
       // Carrega o iframe do servidor selecionado
       const urlObj = servidores[index];
       if (urlObj) {
+        // BUSCA POR TODOS OS POSSÍVEIS ELEMENTOS QUE PODEM SER SUBSTITUÍDOS
         const elementoAtual =
           document.getElementById("assistir-obra-capa") ||
-          document.getElementById("player");
+          document.getElementById("player") ||
+          document.getElementById("div-preview-trailer"); // ADICIONADO
+
         if (!elementoAtual) return;
 
         const iframe = document.createElement("iframe");
@@ -1210,6 +1619,12 @@ async function initAssistir(obraIdParam, tipoParam) {
         iframe.scrolling = "no";
         iframe.frameBorder = "0";
         elementoAtual.replaceWith(iframe);
+
+        // LIMPA O TIMEOUT DO TRAILER AO CARREGAR UM SERVIDOR
+        if (trailerTimeout) {
+          clearTimeout(trailerTimeout);
+          trailerTimeout = null;
+        }
       }
 
       // Primeiro remove o dropdown
@@ -1236,7 +1651,8 @@ async function initAssistir(obraIdParam, tipoParam) {
       );
       if (!trailer) return;
 
-      setTimeout(() => {
+      // ARMAZENA O TIMEOUT NA VARIÁVEL GLOBAL
+      trailerTimeout = setTimeout(() => {
         const capaDiv = document.getElementById("assistir-obra-capa");
         if (!capaDiv) return;
 
@@ -1244,10 +1660,13 @@ async function initAssistir(obraIdParam, tipoParam) {
         wrapper.id = "div-preview-trailer";
 
         const iframe = document.createElement("iframe");
-        iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`;
+        iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&disablekb=1&fs=0&loop=1&playlist=${trailer.key}`;
         iframe.allow = "autoplay; encrypted-media";
         iframe.allowFullscreen = true;
         iframe.id = "iframe-assistir";
+        iframe.style.pointerEvents = "none";
+        iframe.style.userSelect = "none";
+        iframe.style.cursor = "default";
 
         wrapper.appendChild(iframe);
 
@@ -1420,27 +1839,64 @@ async function initPerfil() {
     }
 
     async function criarCardObra(workId, container) {
-      let tipo = "movie";
-      let res = await fetch(
-        `https://api.themoviedb.org/3/movie/${workId}?api_key=${apiKey}&language=pt-BR`
-      );
-      let detalhes = await res.json();
+      // REGRA SIMPLES: Se tem letras é filme, se é só números é série
+      let tipo = /[a-zA-Z]/.test(workId) ? "movie" : "tv";
 
-      if (detalhes.status_code === 34) {
-        tipo = "tv";
-        res = await fetch(
-          `https://api.themoviedb.org/3/tv/${workId}?api_key=${apiKey}&language=pt-BR`
-        );
-        detalhes = await res.json();
+      console.log(`🎯 Obra ${workId} identificada como: ${tipo}`);
+
+      let detalhes = null;
+
+      try {
+        if (tipo === "movie" && workId.startsWith("tt")) {
+          // É filme IMDB - converte para TMDB
+          const convertRes = await fetch(
+            `https://api.themoviedb.org/3/find/${workId}?api_key=${apiKey}&language=pt-BR&external_source=imdb_id`
+          );
+          const convertData = await convertRes.json();
+
+          if (
+            convertData.movie_results &&
+            convertData.movie_results.length > 0
+          ) {
+            const tmdbId = convertData.movie_results[0].id;
+            const res = await fetch(
+              `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${apiKey}&language=pt-BR`
+            );
+            detalhes = await res.json();
+          }
+        } else {
+          // É série TMDB (ou filme TMDB se tiver letras mas não for tt)
+          const res = await fetch(
+            `https://api.themoviedb.org/3/${tipo}/${workId}?api_key=${apiKey}&language=pt-BR`
+          );
+          detalhes = await res.json();
+
+          // Se não encontrou, tenta o outro tipo como fallback
+          if (detalhes.status_code === 34) {
+            console.log(
+              `🔄 Fallback: ${workId} não é ${tipo}, tentando como ${
+                tipo === "movie" ? "tv" : "movie"
+              }`
+            );
+            tipo = tipo === "movie" ? "tv" : "movie";
+            const fallbackRes = await fetch(
+              `https://api.themoviedb.org/3/${tipo}/${workId}?api_key=${apiKey}&language=pt-BR`
+            );
+            detalhes = await fallbackRes.json();
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao buscar obra:", error);
       }
 
+      // Resto do código permanece igual...
       const capaUrl =
         (await buscarImagemObra(workId, tipo)) ||
-        (detalhes.poster_path
+        (detalhes?.poster_path
           ? `https://image.tmdb.org/t/p/w500${detalhes.poster_path}`
           : "imagens/semfoto.png");
 
-      const nome = detalhes.title || detalhes.name || "Título desconhecido";
+      const nome = detalhes?.title || detalhes?.name || "Título desconhecido";
 
       const obraDiv = document.createElement("div");
       obraDiv.classList.add("obra");
@@ -1475,30 +1931,28 @@ async function initPerfil() {
       container.appendChild(obraDiv);
       return detalhes;
     }
-
     // -----------------------
     // CONFIGURAR BOTÕES "VER TUDO"
     // -----------------------
-    // No initPerfil, atualize a função configurarBotaoVerTudo:
     function configurarBotaoVerTudo(seletor, tipoLista, works) {
       const botaoVerTudo = document.querySelector(seletor);
-      if (botaoVerTudo && works.length > 10) {
-        botaoVerTudo.style.display = "block";
-        botaoVerTudo.addEventListener("click", () => {
-          // Salva os dados da lista no sessionStorage para usar na listagem.html
-          sessionStorage.setItem("listaTipo", tipoLista);
-          sessionStorage.setItem("listaWorks", JSON.stringify(works));
+      if (botaoVerTudo) {
+        botaoVerTudo.style.display = works.length > 10 ? "block" : "none";
 
-          if (typeof window.carregarPagina === "function") {
-            window.carregarPagina("paginas/listagem.html", () => {
-              if (typeof initListagem === "function") {
-                initListagem();
-              }
-            });
-          }
-        });
-      } else if (botaoVerTudo) {
-        botaoVerTudo.style.display = "none";
+        if (works.length > 10) {
+          botaoVerTudo.addEventListener("click", () => {
+            sessionStorage.setItem("listaTipo", tipoLista);
+            sessionStorage.setItem("listaWorks", JSON.stringify(works));
+
+            if (typeof window.carregarPagina === "function") {
+              window.carregarPagina("paginas/listagem.html", () => {
+                if (typeof initListagem === "function") {
+                  initListagem();
+                }
+              });
+            }
+          });
+        }
       }
     }
 
@@ -1515,7 +1969,7 @@ async function initPerfil() {
         '<label style="color: #999; text-align: center;">Nenhuma obra curtida ainda</label>';
     } else {
       // Pega apenas os primeiros 10 itens
-      const curtidasParaMostrar = likedWorks.slice(0, 10);
+      const curtidasParaMostrar = likedWorks.slice(-10).reverse();
 
       for (const work of curtidasParaMostrar) {
         await criarCardObra(work.work_id, listaCurtidasDiv);
@@ -1545,9 +1999,17 @@ async function initPerfil() {
       perfilEssencia.style.backgroundImage =
         "url('./imagens/essencia-vazia.png')";
       perfilEssencia.style.boxShadow = "0 0 50px 10px rgba(34, 47, 77, 0.3)";
+
+      //  ESCONDE O BOTÃO "VER TUDO" DOS ASSISTIDOS SE NÃO HOUVER ITENS
+      const botaoVerTudoAssistidos = document.querySelector(
+        "#lista-assistidos .lista-ver"
+      );
+      if (botaoVerTudoAssistidos) {
+        botaoVerTudoAssistidos.style.display = "none";
+      }
     } else {
       // Pega apenas os primeiros 10 itens para exibição
-      const assistidosParaMostrar = watchedWorks.slice(0, 10);
+      const assistidosParaMostrar = watchedWorks.slice(-10).reverse();
       let generos = {};
 
       for (const work of assistidosParaMostrar) {
@@ -1559,7 +2021,7 @@ async function initPerfil() {
         }
       }
 
-      // Configura botão "Ver tudo" para assistidos
+      //  CONFIGURA BOTÃO "VER TUDO" PARA ASSISTIDOS (SÓ SE TIVER MAIS DE 10)
       configurarBotaoVerTudo(
         "#lista-assistidos .lista-ver",
         "assistidos",
@@ -1575,24 +2037,42 @@ async function initPerfil() {
         // Recalcula gêneros com TODOS os assistidos para a essência
         let todosGeneros = {};
         for (const work of watchedWorks) {
-          let tipo = "movie";
-          let res = await fetch(
-            `https://api.themoviedb.org/3/movie/${work.work_id}?api_key=${apiKey}&language=pt-BR`
-          );
-          let detalhes = await res.json();
+          // MESMA REGRA: Se tem letras é filme, se é só números é série
+          let tipo = /[a-zA-Z]/.test(work.work_id) ? "movie" : "tv";
+          let detalhes = null;
 
-          if (detalhes.status_code === 34) {
-            tipo = "tv";
-            res = await fetch(
-              `https://api.themoviedb.org/3/tv/${work.work_id}?api_key=${apiKey}&language=pt-BR`
-            );
-            detalhes = await res.json();
-          }
+          try {
+            if (tipo === "movie" && work.work_id.startsWith("tt")) {
+              // Converte IMDB para TMDB
+              const convertRes = await fetch(
+                `https://api.themoviedb.org/3/find/${work.work_id}?api_key=${apiKey}&language=pt-BR&external_source=imdb_id`
+              );
+              const convertData = await convertRes.json();
 
-          if (detalhes && detalhes.genres) {
-            detalhes.genres.forEach((g) => {
-              todosGeneros[g.name] = (todosGeneros[g.name] || 0) + 1;
-            });
+              if (
+                convertData.movie_results &&
+                convertData.movie_results.length > 0
+              ) {
+                const tmdbId = convertData.movie_results[0].id;
+                const res = await fetch(
+                  `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${apiKey}&language=pt-BR`
+                );
+                detalhes = await res.json();
+              }
+            } else {
+              const res = await fetch(
+                `https://api.themoviedb.org/3/${tipo}/${work.work_id}?api_key=${apiKey}&language=pt-BR`
+              );
+              detalhes = await res.json();
+            }
+
+            if (detalhes && detalhes.genres) {
+              detalhes.genres.forEach((g) => {
+                todosGeneros[g.name] = (todosGeneros[g.name] || 0) + 1;
+              });
+            }
+          } catch (error) {
+            console.error("Erro ao buscar obra na essência:", error);
           }
         }
 
@@ -1620,7 +2100,7 @@ async function initPerfil() {
         const mais = Object.entries(pontuacoes).sort((a, b) => b[1] - a[1])[0];
         const visuais = {
           destemido: {
-            img: "imagens/essencia-destemido.png", // Remove o "www/"
+            img: "imagens/essencia-destemido.png",
             sombra: "rgba(231, 156, 71, 0.3)",
           },
           sonhador: {
@@ -1658,22 +2138,43 @@ async function initPerfil() {
         perfilEssencia.style.boxShadow = `0 0 50px 10px ${escolhido.sombra}`;
       }
     }
+    setTimeout(() => {
+      const botaoCurtidas = document.querySelector(
+        "#lista-curtidas .lista-ver"
+      );
+      const botaoAssistidos = document.querySelector(
+        "#lista-assistidos .lista-ver"
+      );
+
+      if (botaoCurtidas && likedWorks.length > 10) {
+        botaoCurtidas.style.display = "block";
+        console.log('✅ Botão "Ver tudo" das curtidas liberado');
+      }
+
+      if (botaoAssistidos && watchedWorks.length > 10) {
+        botaoAssistidos.style.display = "block";
+        console.log('✅ Botão "Ver tudo" dos assistidos liberado');
+      }
+
+      console.log("🎉 Perfil totalmente carregado!");
+    }, 100);
   } catch (err) {
     console.error("Erro ao carregar perfil:", err);
   }
 }
 
 // ------------------------
-// INIT LISTAGEM
+// INIT LISTAGEM (COM RECARGA AO VOLTAR)
 // ------------------------
 async function initListagem() {
+  console.log("🟢 INIT LISTAGEM CHAMADO");
+
   const apiKey = "e293e84786f06c94bf36414cc9240da4";
   const listagemConteudo = document.getElementById("listagem-conteudo");
   const botaoVoltar = document.getElementById("listagem-botao-voltar");
 
   if (!listagemConteudo) return;
 
-  // Botão voltar
   botaoVoltar.addEventListener("click", () => {
     if (typeof window.voltarPagina === "function") {
       window.voltarPagina();
@@ -1685,6 +2186,14 @@ async function initListagem() {
   const listaWorks = JSON.parse(sessionStorage.getItem("listaWorks") || "[]");
   const playlistGenero = sessionStorage.getItem("playlistGenero");
   const playlistTitulo = sessionStorage.getItem("playlistTitulo");
+  const playlistUrl = sessionStorage.getItem("playlistUrl");
+
+  console.log("📋 Dados do sessionStorage:", {
+    listaTipo,
+    listaWorksLength: listaWorks.length,
+    playlistGenero,
+    playlistTitulo,
+  });
 
   if (!listaTipo) {
     listagemConteudo.innerHTML =
@@ -1692,7 +2201,7 @@ async function initListagem() {
     return;
   }
 
-  // Título da página baseado no tipo - ATUALIZADO
+  // Título da página baseado no tipo
   const titulos = {
     curtidas: "Obras Curtidas",
     assistidos: "Obras Assistidas",
@@ -1714,15 +2223,43 @@ async function initListagem() {
     return await response.json();
   }
 
-  // Função para criar cards (igual à pesquisa)
+  // Função para criar cards
   async function criarCardObra(workId) {
-    let tipo = "movie";
-    let detalhes = await getContentDetails(workId, "movie");
+    let tipo = /[a-zA-Z]/.test(workId) ? "movie" : "tv";
 
-    // Se não for filme, tenta como série
-    if (detalhes.status_code === 34) {
-      tipo = "tv";
-      detalhes = await getContentDetails(workId, "tv");
+    console.log(`🎯 Listagem: Obra ${workId} identificada como: ${tipo}`);
+
+    let detalhes = null;
+
+    try {
+      if (tipo === "movie" && workId.startsWith("tt")) {
+        // É filme IMDB - converte para TMDB
+        const convertRes = await fetch(
+          `https://api.themoviedb.org/3/find/${workId}?api_key=${apiKey}&language=pt-BR&external_source=imdb_id`
+        );
+        const convertData = await convertRes.json();
+
+        if (convertData.movie_results && convertData.movie_results.length > 0) {
+          const tmdbId = convertData.movie_results[0].id;
+          detalhes = await getContentDetails(tmdbId, "movie");
+        }
+      } else {
+        // Busca direto pelo tipo
+        detalhes = await getContentDetails(workId, tipo);
+
+        // Fallback se não encontrou
+        if (detalhes && detalhes.status_code === 34) {
+          console.log(
+            `🔄 Listagem Fallback: ${workId} não é ${tipo}, tentando como ${
+              tipo === "movie" ? "tv" : "movie"
+            }`
+          );
+          tipo = tipo === "movie" ? "tv" : "movie";
+          detalhes = await getContentDetails(workId, tipo);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar obra na listagem:", error);
     }
 
     if (!detalhes || detalhes.status_code === 34) return null;
@@ -1802,7 +2339,7 @@ async function initListagem() {
     wrapper.dataset.obraId = workId;
     wrapper.dataset.tipo = tipo;
 
-    // Clique SPA usando carregarPagina (igual à pesquisa)
+    // Clique SPA - MODIFICADO PARA PRESERVAR sessionStorage
     wrapper.addEventListener("click", () => {
       const navbar = document.querySelector(".navbar");
       if (navbar) navbar.classList.add("navbar-esconde");
@@ -1821,17 +2358,23 @@ async function initListagem() {
   // SE FOR UMA PLAYLIST, BUSCAR OBRAS DA API
   if (listaTipo === "playlist" && playlistGenero) {
     try {
-      let url = "";
+      let url = playlistUrl;
 
-      // Definir URL baseada no tipo de playlist
-      if (playlistGenero === "trending") {
-        url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=pt-BR`;
-      } else {
-        url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${playlistGenero}&sort_by=popularity.desc&page=1`;
+      // Se não tiver URL salva, usar a lógica antiga como fallback
+      if (!url) {
+        if (playlistGenero === "trending") {
+          url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=pt-BR`;
+        } else {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=pt-BR&with_genres=${playlistGenero}&sort_by=popularity.desc&page=1`;
+        }
       }
+
+      console.log(`🔗 Buscando playlist na URL: ${url}`);
 
       const response = await fetch(url);
       const data = await response.json();
+
+      console.log(`📊 Dados recebidos:`, data.results?.length, "obras");
 
       if (!data.results?.length) {
         listagemConteudo.innerHTML =
@@ -1839,40 +2382,91 @@ async function initListagem() {
         return;
       }
 
-      // Processar todas as obras da playlist
+      const idsVistos = new Set();
+      let obrasCarregadas = 0;
+
       for (const movie of data.results) {
+        if (idsVistos.has(movie.id)) {
+          console.log(`⏭️ Pulando duplicata: ${movie.title} (ID: ${movie.id})`);
+          continue;
+        }
+
+        idsVistos.add(movie.id);
         const card = await criarCardObra(movie.id);
         if (card) {
           listagemConteudo.appendChild(card);
+          obrasCarregadas++;
         }
+      }
+
+      console.log(
+        `✅ ${obrasCarregadas} obras únicas carregadas de ${data.results.length} totais`
+      );
+
+      if (obrasCarregadas === 0) {
+        listagemConteudo.innerHTML =
+          '<label style="color: #999; text-align: center;">Nenhuma obra válida encontrada</label>';
       }
     } catch (err) {
       console.error("Erro ao carregar playlist:", err);
       listagemConteudo.innerHTML =
         '<label style="color: #999; text-align: center;">Erro ao carregar a playlist</label>';
     }
-    return; // Importante: sair da função aqui
+    return;
   }
 
-  // PROCESSAR OBRAS DE "CURTIDAS" E "ASSISTIDOS" (código original)
-  try {
-    for (const work of listaWorks) {
-      const workId = work.work_id || work;
-      const card = await criarCardObra(workId);
-      if (card) {
-        listagemConteudo.appendChild(card);
-      }
-    }
+  // LISTAGEM DE CURTIDAS/ASSISTIDOS
+  if (listaTipo === "curtidas" || listaTipo === "assistidos") {
+    try {
+      console.log(`📋 Carregando ${listaTipo}:`, listaWorks.length, "obras");
 
-    // Se não encontrou nenhuma obra válida
-    if (listagemConteudo.children.length === 0) {
+      if (!listaWorks || listaWorks.length === 0) {
+        listagemConteudo.innerHTML =
+          '<label style="color: #999; text-align: center;">Nenhuma obra encontrada</label>';
+        return;
+      }
+
+      const obrasInvertidas = [...listaWorks].reverse();
+      let obrasCarregadas = 0;
+      const idsProcessados = new Set();
+
+      for (const work of obrasInvertidas) {
+        try {
+          const workId = work.work_id || work;
+
+          if (idsProcessados.has(workId)) {
+            console.log(`⏭️ Pulando obra duplicada: ${workId}`);
+            continue;
+          }
+          idsProcessados.add(workId);
+
+          const card = await criarCardObra(workId);
+          if (card) {
+            listagemConteudo.appendChild(card);
+            obrasCarregadas++;
+          }
+        } catch (workErr) {
+          console.error(
+            `Erro ao processar obra ${work.work_id || work}:`,
+            workErr
+          );
+        }
+      }
+
+      console.log(
+        `✅ Obras únicas carregadas: ${obrasCarregadas} de ${listaWorks.length}`
+      );
+
+      if (obrasCarregadas === 0) {
+        listagemConteudo.innerHTML =
+          '<label style="color: #999; text-align: center;">Nenhuma obra válida encontrada</label>';
+      }
+    } catch (err) {
+      console.error("Erro ao carregar listagem:", err);
       listagemConteudo.innerHTML =
-        '<label style="color: #999; text-align: center;">Nenhuma obra válida encontrada</label>';
+        '<label style="color: #999; text-align: center;">Erro ao carregar a lista</label>';
     }
-  } catch (err) {
-    console.error("Erro ao carregar listagem:", err);
-    listagemConteudo.innerHTML =
-      '<label style="color: #999; text-align: center;">Erro ao carregar a lista</label>';
+    return;
   }
 }
 // ------------------------
@@ -1986,30 +2580,38 @@ function initJogoEscolhido() {
   });
 
   // EVENTOS PARA TOUCH (MOBILE)
-  botaoVoltar.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    startDrag(touch.clientX, touch.clientY);
-  }, { passive: false });
+  botaoVoltar.addEventListener(
+    "touchstart",
+    (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      startDrag(touch.clientX, touch.clientY);
+    },
+    { passive: false }
+  );
 
-  botaoVoltar.addEventListener("touchmove", (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    handleDrag(touch.clientX, touch.clientY);
-  }, { passive: false });
+  botaoVoltar.addEventListener(
+    "touchmove",
+    (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      handleDrag(touch.clientX, touch.clientY);
+    },
+    { passive: false }
+  );
 
   botaoVoltar.addEventListener("touchend", (e) => {
     e.preventDefault();
     endDrag();
-    
+
     // Se foi um toque simples (não arrastou), simula clique
     if (!movimento) {
       const touch = e.changedTouches[0];
-      const clickEvent = new MouseEvent('click', {
+      const clickEvent = new MouseEvent("click", {
         view: window,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       });
       botaoVoltar.dispatchEvent(clickEvent);
     }
@@ -2037,7 +2639,7 @@ function initJogoEscolhido() {
   function handleDrag(clientX, clientY) {
     const dx = clientX - startX;
     const dy = clientY - startY;
-    
+
     // Se moveu mais de 5 pixels, considera que está arrastando
     if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
       movimento = true;
@@ -2067,21 +2669,21 @@ function initJogoEscolhido() {
     botaoVoltar.style.cursor = "grab";
     botaoVoltar.style.transition = "transform 0.2s, background-color 0.2s";
     botaoVoltar.style.userSelect = "auto";
-    
+
     // Salva a posição no localStorage
     setTimeout(() => {
-      localStorage.setItem('botaoVoltarPosX', botaoVoltar.style.left);
-      localStorage.setItem('botaoVoltarPosY', botaoVoltar.style.top);
+      localStorage.setItem("botaoVoltarPosX", botaoVoltar.style.left);
+      localStorage.setItem("botaoVoltarPosY", botaoVoltar.style.top);
     }, 100);
   }
 
   // Posição inicial (carrega do localStorage se existir)
   botaoVoltar.style.position = "fixed";
   botaoVoltar.style.cursor = "grab";
-  
-  const savedX = localStorage.getItem('botaoVoltarPosX');
-  const savedY = localStorage.getItem('botaoVoltarPosY');
-  
+
+  const savedX = localStorage.getItem("botaoVoltarPosX");
+  const savedY = localStorage.getItem("botaoVoltarPosY");
+
   if (savedX && savedY) {
     botaoVoltar.style.left = savedX;
     botaoVoltar.style.top = savedY;

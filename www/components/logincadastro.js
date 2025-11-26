@@ -32,9 +32,6 @@ async function fazerLogin(email, senha) {
 
   console.log("Login ok:", data.user);
   location.href = "principal.html";
-  carregarPagina("paginas/inicio.html", function () {
-    if (typeof initInicio === "function") initInicio();
-  });
 }
 
 async function fazerCadastro(nome, email, senha) {
@@ -150,11 +147,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==== UI: alternar telas ====
 function alternarTela(tipo) {
   tela.classList.toggle(`mostrar-${tipo}`);
+  const botaovoltar = document.getElementById(`${tipo}-botao-voltar`);
+  botaovoltar.style.display = "flex";
+  setTimeout(() => (botaovoltar.style.opacity = 1), 100);
+
   const ativo = tela.classList.contains(`mostrar-${tipo}`);
   tela.style.setProperty("--blur-before", ativo ? "5px" : "1px");
   tela.style.setProperty("--brightness-before", ativo ? "0.5" : "1");
 
   if (!ativo) {
+    setTimeout(() => (botaovoltar.style.opacity = 0), 200);
+    setTimeout(() => (botaovoltar.style.display = "none"), 500);
     setTimeout(() => {
       document.querySelectorAll(`#${tipo}-itens input`).forEach((i) => {
         if (i.type === "checkbox") i.checked = false;
@@ -176,3 +179,46 @@ document.getElementById("login-botao-voltar").onclick = () =>
   alternarTela("login");
 document.getElementById("cadastro-botao-voltar").onclick = () =>
   alternarTela("cadastro");
+
+// === TOGGLE VISUALIZAÇÃO DE SENHA ===
+function initPasswordToggle() {
+  // Para login
+  const loginToggle = document.getElementById("login-senha-toggle");
+  const loginSenha = document.getElementById("login-senha");
+
+  if (loginToggle && loginSenha) {
+    loginToggle.addEventListener("click", function () {
+      const type =
+        loginSenha.getAttribute("type") === "password" ? "text" : "password";
+      loginSenha.setAttribute("type", type);
+
+      // Altera a imagem de background
+      if (type === "text") {
+        this.style.backgroundImage = "url('imagens/preacesso-olhoaberto.png')";
+      } else {
+        this.style.backgroundImage = "url('imagens/preacesso-olhofechado.png')";
+      }
+    });
+  }
+
+  // Para cadastro (se tiver)
+  const cadastroToggle = document.getElementById("cadastro-senha-toggle");
+  const cadastroSenha = document.getElementById("cadastro-senha");
+
+  if (cadastroToggle && cadastroSenha) {
+    cadastroToggle.addEventListener("click", function () {
+      const type =
+        cadastroSenha.getAttribute("type") === "password" ? "text" : "password";
+      cadastroSenha.setAttribute("type", type);
+
+      // Altera a imagem de background
+      if (type === "text") {
+        this.style.backgroundImage = "url('imagens/preacesso-olhoaberto.png')";
+      } else {
+        this.style.backgroundImage = "url('imagens/preacesso-olhofechado.png')";
+      }
+    });
+  }
+}
+// Inicializa quando o DOM carregar
+document.addEventListener("DOMContentLoaded", initPasswordToggle);
